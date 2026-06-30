@@ -108,6 +108,35 @@ async function translateProductName(text, fromLang) {
 // create policy "Public insert" on buyers for insert with check (true);
 // create policy "Public read" on orders for select using (true);
 // create policy "Public insert" on orders for insert with check (true);
+//
+// create table conversations (
+//   id uuid default gen_random_uuid() primary key,
+//   seller_id uuid references sellers(id),
+//   seller_name text,
+//   buyer_phone text,
+//   buyer_name text,
+//   village text,
+//   shipper text,
+//   items jsonb,
+//   total integer,
+//   created_at timestamptz default now()
+// );
+//
+// create table messages (
+//   id uuid default gen_random_uuid() primary key,
+//   conversation_id uuid references conversations(id),
+//   sender text, -- 'buyer' or 'seller'
+//   text text,
+//   image text,
+//   created_at timestamptz default now()
+// );
+//
+// alter table conversations enable row level security;
+// alter table messages enable row level security;
+// create policy "Public read" on conversations for select using (true);
+// create policy "Public insert" on conversations for insert with check (true);
+// create policy "Public read" on messages for select using (true);
+// create policy "Public insert" on messages for insert with check (true);
 
 // ─── CONSTANTS ───────────────────────────────────────────────────────────────
 const CATEGORIES = [
@@ -123,19 +152,12 @@ const CATEGORIES = [
 
 const SHIPPERS = ["Anousith", "HAL Express", "Mixay Express"];
 
-const DEMO_PRODUCTS = [
-  { id: "d1", category: "fashion",     name_lo: "ເສື້ອຜ້າລາວໃໝ່",   name_en: "Lao Silk Dress",    name_zh: "老挝丝绸裙",  price: 85000,   emoji: "👗", seller_name: "ຮ້ານ ນາງຟ້າ",    rating: 4.8, sold: 124, badge: "🔥" },
-  { id: "d2", category: "electronics", name_lo: "ໂທລະສັບ Samsung",   name_en: "Samsung A55",       name_zh: "三星A55",     price: 3200000, emoji: "📱", seller_name: "Tech Vientiane",  rating: 4.9, sold: 89,  badge: "✅" },
-  { id: "d3", category: "beauty",      name_lo: "ຄຣີມຫນ້າໃສ",       name_en: "Whitening Cream",   name_zh: "美白霜",      price: 120000,  emoji: "💄", seller_name: "Beauty House",    rating: 4.7, sold: 310, badge: "🔥" },
-  { id: "d4", category: "food",        name_lo: "ກາເຟລາວ",           name_en: "Lao Coffee 500g",   name_zh: "老挝咖啡",    price: 65000,   emoji: "☕", seller_name: "ກາເຟ ບໍລິຄຳໄຊ", rating: 5.0, sold: 502, badge: "⭐" },
-  { id: "d5", category: "home",        name_lo: "ໂຄມໄຟ LED",         name_en: "LED Lamp Set",      name_zh: "LED灯组",     price: 95000,   emoji: "💡", seller_name: "Home Plus",       rating: 4.6, sold: 67,  badge: "" },
-  { id: "d6", category: "beauty",      name_lo: "ນ້ຳຫອມ Dior",       name_en: "Dior Perfume 50ml", name_zh: "迪奥香水",    price: 850000,  emoji: "🌸", seller_name: "Luxe Laos",       rating: 5.0, sold: 28,  badge: "⭐" },
-];
+const DEMO_PRODUCTS = [];
 
 const L = {
-  lo: { search:"ຄົ້ນຫາສິນຄ້າ...", cart:"ກະຕ່າ", buy:"ຊື້ດຽວນີ້", msg:"ສົ່ງຂໍ້ຄວາມ", sold:"ຂາຍແລ້ວ", shipper:"ເລືອກຂົນສົ່ງ", add:"ເພີ່ມໃສ່ກະຕ່າ", total:"ລວມ", checkout:"ຊຳລະ", empty:"ກະຕ່າຫວ່າງ", close:"ປິດ", pay:"ວິທີຊຳລະ", qr:"ສະແກນ QR ຊຳລະ", home:"ໜ້າຫຼັກ", sell:"ຂາຍ", dashboard:"ຈັດການ", save:"ບັນທຶກ", cancel:"ຍົກເລີກ", products:"ສິນຄ້າ", addProduct:"ເພີ່ມສິນຄ້າ", sellerReg:"ລົງທະບຽນຂາຍ", storeName:"ຊື່ຮ້ານ", phone:"ເບີໂທ", whatsapp:"WhatsApp", village:"ບ້ານ / ສາຂາ", mainCategory:"ໝວດຫຼັກ", qrLabel:"ຊື່ QR ໂອນເງິນ", price:"ລາຄາ (₭)", emoji:"Icon", productName:"ຊື່ສິນຄ້າ", desc:"ລາຍລະອຽດ", register:"ລົງທະບຽນ", myShop:"ຮ້ານຂອງຂ້ອຍ", orders:"ຄຳສັ່ງ", loading:"ກຳລັງໂຫຼດ...", login:"ເຂົ້າສູ່ລະບົບ", logout:"ອອກຈາກລະບົບ", password:"ລະຫັດຜ່ານ", loginTitle:"ເຂົ້າສູ່ລະບົບຮ້ານຄ້າ", noAccount:"ຍັງບໍ່ມີຮ້ານ?", createAccount:"ລົງທະບຽນຮ້ານໃໝ່", wrongLogin:"ເບີໂທ ຫຼື ລະຫັດຜ່ານບໍ່ຖືກຕ້ອງ", productPhoto:"ຮູບສິນຄ້າ", uploadPhoto:"ກົດເພື່ອອັບໂຫຼດຮູບ", translating:"ກຳລັງແປ...", nameOneOnly:"ຂຽນຊື່ສິນຄ້າພາສາໃດກໍໄດ້ ລະບົບຈະແປໃຫ້ອັດຕະໂນມັດ" },
-  en: { search:"Search products...", cart:"Cart", buy:"Buy Now", msg:"Message", sold:"sold", shipper:"Choose Shipper", add:"Add to Cart", total:"Total", checkout:"Checkout", empty:"Cart is empty", close:"Close", pay:"Payment", qr:"Scan QR to Pay", home:"Home", sell:"Sell", dashboard:"Manage", save:"Save", cancel:"Cancel", products:"Products", addProduct:"Add Product", sellerReg:"Become a Seller", storeName:"Store Name", phone:"Phone", whatsapp:"WhatsApp", village:"Village / Branch", mainCategory:"Main Category", qrLabel:"QR Payment Name", price:"Price (₭)", emoji:"Icon", productName:"Product Name", desc:"Description", register:"Register", myShop:"My Shop", orders:"Orders", loading:"Loading...", login:"Login", logout:"Logout", password:"Password", loginTitle:"Seller Login", noAccount:"No shop yet?", createAccount:"Register a new shop", wrongLogin:"Wrong phone or password", productPhoto:"Product Photo", uploadPhoto:"Tap to upload photo", translating:"Translating...", nameOneOnly:"Write the product name in any language — we'll auto-translate it" },
-  zh: { search:"搜索商品...", cart:"购物车", buy:"立即购买", msg:"发消息", sold:"已售", shipper:"选择快递", add:"加入购物车", total:"合计", checkout:"结算", empty:"购物车为空", close:"关闭", pay:"付款方式", qr:"扫码支付", home:"首页", sell:"卖货", dashboard:"管理", save:"保存", cancel:"取消", products:"商品", addProduct:"添加商品", sellerReg:"成为卖家", storeName:"店铺名称", phone:"电话", whatsapp:"WhatsApp", village:"村/分支", mainCategory:"主要类别", qrLabel:"QR收款名称", price:"价格 (₭)", emoji:"图标", productName:"商品名称", desc:"描述", register:"注册", myShop:"我的店", orders:"订单", loading:"加载中...", login:"登录", logout:"退出登录", password:"密码", loginTitle:"卖家登录", noAccount:"还没有店铺？", createAccount:"注册新店铺", wrongLogin:"电话或密码错误", productPhoto:"商品照片", uploadPhoto:"点击上传照片", translating:"翻译中...", nameOneOnly:"用任意语言输入商品名称，系统会自动翻译" },
+  lo: { search:"ຄົ້ນຫາສິນຄ້າ...", cart:"ກະຕ່າ", buy:"ຊື້ດຽວນີ້", msg:"ສົ່ງຂໍ້ຄວາມ", sold:"ຂາຍແລ້ວ", shipper:"ເລືອກຂົນສົ່ງ", add:"ເພີ່ມໃສ່ກະຕ່າ", total:"ລວມ", checkout:"ຊຳລະ", empty:"ກະຕ່າຫວ່າງ", close:"ປິດ", pay:"ວິທີຊຳລະ", qr:"ສະແກນ QR ຊຳລະ", home:"ໜ້າຫຼັກ", sell:"ຂາຍ", dashboard:"ຈັດການ", save:"ບັນທຶກ", cancel:"ຍົກເລີກ", products:"ສິນຄ້າ", addProduct:"ເພີ່ມສິນຄ້າ", sellerReg:"ລົງທະບຽນຂາຍ", storeName:"ຊື່ຮ້ານ", phone:"ເບີໂທ", whatsapp:"WhatsApp", village:"ບ້ານ / ສາຂາ", mainCategory:"ໝວດຫຼັກ", qrLabel:"ຊື່ QR ໂອນເງິນ", price:"ລາຄາ (₭)", emoji:"Icon", productName:"ຊື່ສິນຄ້າ", desc:"ລາຍລະອຽດ", register:"ລົງທະບຽນ", myShop:"ຮ້ານຂອງຂ້ອຍ", orders:"ຄຳສັ່ງ", loading:"ກຳລັງໂຫຼດ...", login:"ເຂົ້າສູ່ລະບົບ", logout:"ອອກຈາກລະບົບ", password:"ລະຫັດຜ່ານ", loginTitle:"ເຂົ້າສູ່ລະບົບຮ້ານຄ້າ", noAccount:"ຍັງບໍ່ມີຮ້ານ?", createAccount:"ລົງທະບຽນຮ້ານໃໝ່", wrongLogin:"ເບີໂທ ຫຼື ລະຫັດຜ່ານບໍ່ຖືກຕ້ອງ", productPhoto:"ຮູບສິນຄ້າ", uploadPhoto:"ກົດເພື່ອອັບໂຫຼດຮູບ", translating:"ກຳລັງແປ...", nameOneOnly:"ຂຽນຊື່ສິນຄ້າພາສາໃດກໍໄດ້ ລະບົບຈະແປໃຫ້ອັດຕະໂນມັດ", messages:"ຂໍ້ຄວາມ", welcomeMsg:"ຍິນດີຕ້ອນຮັບ! ຂອບໃຈສຳລັບການສັ່ງຊື້", orderSummary:"ສະຫຼຸບຄຳສັ່ງຊື້", deliveryTo:"ສົ່ງໄປທີ່", proofRequest:"ກະລຸນາສົ່ງຫຼັກຖານການໂອນເງິນ (ຮູບພາບ) ມາທີ່ນີ້", typeMessage:"ພິມຂໍ້ຄວາມ...", sendProof:"ສົ່ງຫຼັກຖານ", noConversations:"ຍັງບໍ່ມີຂໍ້ຄວາມ", yourBuyerName:"ຊື່ຂອງທ່ານ", yourBuyerPhone:"ເບີໂທຂອງທ່ານ", startChat:"ເລີ່ມສົນທະນາ" },
+  en: { search:"Search products...", cart:"Cart", buy:"Buy Now", msg:"Message", sold:"sold", shipper:"Choose Shipper", add:"Add to Cart", total:"Total", checkout:"Checkout", empty:"Cart is empty", close:"Close", pay:"Payment", qr:"Scan QR to Pay", home:"Home", sell:"Sell", dashboard:"Manage", save:"Save", cancel:"Cancel", products:"Products", addProduct:"Add Product", sellerReg:"Become a Seller", storeName:"Store Name", phone:"Phone", whatsapp:"WhatsApp", village:"Village / Branch", mainCategory:"Main Category", qrLabel:"QR Payment Name", price:"Price (₭)", emoji:"Icon", productName:"Product Name", desc:"Description", register:"Register", myShop:"My Shop", orders:"Orders", loading:"Loading...", login:"Login", logout:"Logout", password:"Password", loginTitle:"Seller Login", noAccount:"No shop yet?", createAccount:"Register a new shop", wrongLogin:"Wrong phone or password", productPhoto:"Product Photo", uploadPhoto:"Tap to upload photo", translating:"Translating...", nameOneOnly:"Write the product name in any language — we'll auto-translate it", messages:"Messages", welcomeMsg:"Welcome! Thanks for your order", orderSummary:"Order Summary", deliveryTo:"Deliver to", proofRequest:"Please send your payment proof (photo) here", typeMessage:"Type a message...", sendProof:"Send proof", noConversations:"No conversations yet", yourBuyerName:"Your name", yourBuyerPhone:"Your phone", startChat:"Start conversation" },
+  zh: { search:"搜索商品...", cart:"购物车", buy:"立即购买", msg:"发消息", sold:"已售", shipper:"选择快递", add:"加入购物车", total:"合计", checkout:"结算", empty:"购物车为空", close:"关闭", pay:"付款方式", qr:"扫码支付", home:"首页", sell:"卖货", dashboard:"管理", save:"保存", cancel:"取消", products:"商品", addProduct:"添加商品", sellerReg:"成为卖家", storeName:"店铺名称", phone:"电话", whatsapp:"WhatsApp", village:"村/分支", mainCategory:"主要类别", qrLabel:"QR收款名称", price:"价格 (₭)", emoji:"图标", productName:"商品名称", desc:"描述", register:"注册", myShop:"我的店", orders:"订单", loading:"加载中...", login:"登录", logout:"退出登录", password:"密码", loginTitle:"卖家登录", noAccount:"还没有店铺？", createAccount:"注册新店铺", wrongLogin:"电话或密码错误", productPhoto:"商品照片", uploadPhoto:"点击上传照片", translating:"翻译中...", nameOneOnly:"用任意语言输入商品名称，系统会自动翻译", messages:"消息", welcomeMsg:"欢迎！感谢您的订单", orderSummary:"订单摘要", deliveryTo:"送货至", proofRequest:"请在此发送付款凭证（照片）", typeMessage:"输入消息...", sendProof:"发送凭证", noConversations:"暂无对话", yourBuyerName:"您的姓名", yourBuyerPhone:"您的电话", startChat:"开始对话" },
 };
 
 const fmt = (n) => n >= 1000000 ? (n/1000000).toFixed(1)+"M ₭" : n >= 1000 ? (n/1000).toFixed(0)+"K ₭" : n+" ₭";
@@ -165,9 +187,9 @@ function ProductCard({ p, lang, onAdd, onDetail }) {
     onMouseEnter={e=>e.currentTarget.style.transform="translateY(-3px)"}
     onMouseLeave={e=>e.currentTarget.style.transform="translateY(0)"}
     >
-      <div style={{ background:"linear-gradient(135deg,#fff8f0,#fff0f8)", fontSize:52, textAlign:"center", padding: p.image?0:"22px 0", position:"relative", overflow:"hidden", height: p.image?120:"auto" }}>
-        {p.image
-          ? <img src={p.image} alt="" style={{width:"100%",height:"100%",objectFit:"cover"}}/>
+      <div style={{ background:"linear-gradient(135deg,#fff8f0,#fff0f8)", fontSize:52, textAlign:"center", position:"relative", overflow:"hidden", aspectRatio:"1/1", display:"flex", alignItems:"center", justifyContent:"center" }}>
+        {p.images && p.images[0]
+          ? <img src={p.images[0]} alt="" style={{width:"100%",height:"100%",objectFit:"cover"}}/>
           : (p.emoji || "📦")
         }
         {p.badge && <span style={{ position:"absolute", top:8, right:8, background:"#ff4d4d", color:"#fff", borderRadius:20, fontSize:10, padding:"2px 7px", fontWeight:700 }}>{p.badge}</span>}
@@ -184,17 +206,21 @@ function ProductCard({ p, lang, onAdd, onDetail }) {
 }
 
 // ─── CART DRAWER ─────────────────────────────────────────────────────────────
-function CartDrawer({ cart, lang, onClose, onQty }) {
+function CartDrawer({ cart, lang, onClose, onQty, onOpenChat }) {
   const t = L[lang];
   const [shipper, setShipper] = useState("");
   const [village, setVillage] = useState("");
+  const [buyerName, setBuyerName] = useState("");
+  const [buyerPhone, setBuyerPhone] = useState("");
   const [showQR, setShowQR] = useState(false);
   const [qrIndex, setQrIndex] = useState(0);
+  const [creating, setCreating] = useState(false);
+  const [conversations, setConversations] = useState([]); // created per seller group
 
   // group cart items by seller
   const groups = cart.reduce((acc, item) => {
     const key = item.seller_id || item.seller_name || "unknown";
-    if (!acc[key]) acc[key] = { seller_name: item.seller_name || "—", qr_image: item.qr_image || null, items: [] };
+    if (!acc[key]) acc[key] = { seller_id: item.seller_id||null, seller_name: item.seller_name || "—", qr_image: item.qr_image || null, items: [] };
     acc[key].items.push(item);
     return acc;
   }, {});
@@ -213,6 +239,29 @@ function CartDrawer({ cart, lang, onClose, onQty }) {
     next: lang==="lo"?"ຮ້ານຕໍ່ໄປ":lang==="en"?"Next seller":"下一个卖家",
     done: lang==="lo"?"ສຳເລັດ":lang==="en"?"Done":"完成",
     subtotal: lang==="lo"?"ລວມຍ່ອຍ":lang==="en"?"Subtotal":"小计",
+    viewChat: lang==="lo"?"ໄປທີ່ການສົນທະນາ":lang==="en"?"Go to chat":"前往聊天",
+  };
+
+  const startCheckout = async () => {
+    setCreating(true);
+    const created = [];
+    for (const group of sellerGroups) {
+      const payload = {
+        seller_id: group.seller_id, seller_name: group.seller_name,
+        buyer_phone: buyerPhone, buyer_name: buyerName,
+        village, shipper, items: group.items, total: group.items.reduce((s,i)=>s+i.price*i.qty,0)
+      };
+      try {
+        const data = await sbFetch("conversations", { method:"POST", body: JSON.stringify(payload) });
+        created.push(data[0]);
+      } catch {
+        created.push({ ...payload, id:"demo-"+Date.now()+Math.random() });
+      }
+    }
+    setConversations(created);
+    setCreating(false);
+    setQrIndex(0);
+    setShowQR(true);
   };
 
   return (
@@ -264,6 +313,14 @@ function CartDrawer({ cart, lang, onClose, onQty }) {
         </div>
         {cart.length > 0 && (
           <div style={{ padding:16, borderTop:"1px solid #f0f0f0" }}>
+            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8,marginBottom:10}}>
+              <input value={buyerName} onChange={e=>setBuyerName(e.target.value)} placeholder={t.yourBuyerName} style={{
+                padding:"9px 10px", borderRadius:10, border:"1.5px solid #e8e8e8", fontSize:12, outline:"none", background:"#fafafa"
+              }}/>
+              <input value={buyerPhone} onChange={e=>setBuyerPhone(e.target.value)} placeholder={t.yourBuyerPhone} style={{
+                padding:"9px 10px", borderRadius:10, border:"1.5px solid #e8e8e8", fontSize:12, outline:"none", background:"#fafafa"
+              }}/>
+            </div>
             <div style={{fontSize:11,color:"#888",marginBottom:6}}>{txt.village}</div>
             <input value={village} onChange={e=>setVillage(e.target.value)} placeholder={txt.villagePh} style={{
               width:"100%", padding:"9px 12px", borderRadius:10, border:"1.5px solid #e8e8e8",
@@ -279,7 +336,9 @@ function CartDrawer({ cart, lang, onClose, onQty }) {
               <span style={{fontWeight:600,color:"#555"}}>{t.total}</span>
               <span style={{fontWeight:800,color:"#e8401c",fontSize:18}}>{fmt(grandTotal)}</span>
             </div>
-            <button onClick={()=>{setQrIndex(0);setShowQR(true);}} style={btn("linear-gradient(90deg,#ff6b35,#e8401c)")}>{t.checkout} →</button>
+            <button onClick={startCheckout} disabled={creating} style={btn(creating?"#ccc":"linear-gradient(90deg,#ff6b35,#e8401c)")}>
+              {creating ? t.loading : `${t.checkout} →`}
+            </button>
           </div>
         )}
       </div>
@@ -297,7 +356,8 @@ function CartDrawer({ cart, lang, onClose, onQty }) {
             }
             <div style={{fontWeight:800,color:"#e8401c",fontSize:24,marginBottom:4}}>{fmt(currentGroupTotal)}</div>
             {shipper && <div style={{fontSize:12,color:"#888"}}>📦 {shipper}{village?` · ${village}`:""}</div>}
-            <div style={{marginTop:16}}>
+            <div style={{marginTop:16,display:"flex",flexDirection:"column",gap:8}}>
+              <button onClick={()=>onOpenChat(conversations[qrIndex])} style={btn("#fff","#e8401c",{border:"1.5px solid #e8401c"})}>💬 {txt.viewChat}</button>
               {isMultiSeller && qrIndex < sellerGroups.length - 1
                 ? <button onClick={()=>setQrIndex(i=>i+1)} style={btn("linear-gradient(90deg,#ff6b35,#e8401c)")}>{txt.next} →</button>
                 : <button onClick={()=>{setShowQR(false);onClose();}} style={btn()}>{txt.done} ✓</button>
@@ -312,19 +372,145 @@ function CartDrawer({ cart, lang, onClose, onQty }) {
 
 
 // ─── DETAIL MODAL ─────────────────────────────────────────────────────────────
+// ─── CHAT MODAL ───────────────────────────────────────────────────────────────
+function ChatModal({ conversation, lang, onClose }) {
+  const t = L[lang];
+  const [messages, setMessages] = useState([]);
+  const [text, setText] = useState("");
+  const [loading, setLoading] = useState(true);
+  const fileInputRef = { current: null };
+
+  const loadMessages = async () => {
+    try {
+      const data = await sbFetch(`messages?conversation_id=eq.${conversation.id}&order=created_at.asc`);
+      setMessages(data || []);
+    } catch { /* demo mode keeps local messages */ }
+    setLoading(false);
+  };
+
+  useEffect(() => { loadMessages(); }, [conversation.id]);
+
+  const send = async (text, image) => {
+    if (!text && !image) return;
+    const payload = { conversation_id: conversation.id, sender: "buyer", text: text||"", image: image||"" };
+    try {
+      const data = await sbFetch("messages", { method:"POST", body: JSON.stringify(payload) });
+      setMessages(m => [...m, data[0]]);
+    } catch {
+      setMessages(m => [...m, { ...payload, id:"demo-"+Date.now() }]);
+    }
+  };
+
+  const handleSend = () => {
+    if (!text.trim()) return;
+    send(text.trim());
+    setText("");
+  };
+
+  const handlePhotoUpload = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => send("", ev.target.result);
+    reader.readAsDataURL(file);
+  };
+
+  return (
+    <div style={{ position:"fixed",inset:0,zIndex:160,background:"#f7f7f9",display:"flex",flexDirection:"column" }}>
+      <div style={{ background:"linear-gradient(90deg,#ff6b35,#e8401c)",padding:"16px 20px",color:"#fff",display:"flex",justifyContent:"space-between",alignItems:"center" }}>
+        <div>
+          <div style={{fontWeight:900,fontSize:16}}>🏪 {conversation.seller_name}</div>
+          <div style={{fontSize:11,opacity:.8}}>📦 {conversation.shipper} · {conversation.village}</div>
+        </div>
+        <button onClick={onClose} style={{background:"rgba(255,255,255,0.2)",border:"none",color:"#fff",borderRadius:10,padding:"8px 14px",cursor:"pointer",fontWeight:700}}>×</button>
+      </div>
+
+      <div style={{flex:1,overflowY:"auto",padding:16,display:"flex",flexDirection:"column",gap:10}}>
+        {/* Welcome + order summary bubble */}
+        <div style={{alignSelf:"flex-start",maxWidth:"85%",background:"#fff",borderRadius:"4px 16px 16px 16px",padding:14,boxShadow:"0 2px 8px rgba(0,0,0,0.06)"}}>
+          <div style={{fontWeight:700,fontSize:13,marginBottom:8}}>👋 {t.welcomeMsg}, {conversation.buyer_name||""}!</div>
+          <div style={{fontSize:11,color:"#888",fontWeight:700,marginBottom:4}}>{t.orderSummary}</div>
+          <div style={{display:"flex",flexDirection:"column",gap:4,marginBottom:8}}>
+            {(conversation.items||[]).map((it,i)=>(
+              <div key={i} style={{display:"flex",justifyContent:"space-between",fontSize:12}}>
+                <span>{it.emoji||"📦"} {it[`name_${lang}`]||it.name_en||it.name_lo} ×{it.qty}</span>
+                <span style={{fontWeight:700,color:"#e8401c"}}>{fmt(it.price*it.qty)}</span>
+              </div>
+            ))}
+          </div>
+          <div style={{borderTop:"1px dashed #eee",paddingTop:8,fontSize:12,display:"flex",justifyContent:"space-between",fontWeight:800}}>
+            <span>{t.total}</span><span style={{color:"#e8401c"}}>{fmt(conversation.total)}</span>
+          </div>
+          <div style={{fontSize:11,color:"#888",marginTop:8}}>📍 {t.deliveryTo}: {conversation.village}</div>
+          <div style={{marginTop:10,background:"#fff5f3",borderRadius:10,padding:"8px 10px",fontSize:11,color:"#e8401c",fontWeight:600}}>
+            📸 {t.proofRequest}
+          </div>
+        </div>
+
+        {messages.map(m=>(
+          <div key={m.id} style={{
+            alignSelf: m.sender==="buyer" ? "flex-end" : "flex-start",
+            maxWidth:"75%",
+            background: m.sender==="buyer" ? "linear-gradient(90deg,#ff6b35,#e8401c)" : "#fff",
+            color: m.sender==="buyer" ? "#fff" : "#1a1a1a",
+            borderRadius: m.sender==="buyer" ? "16px 4px 16px 16px" : "4px 16px 16px 16px",
+            padding:10, boxShadow:"0 2px 8px rgba(0,0,0,0.05)"
+          }}>
+            {m.image && <img src={m.image} alt="" style={{width:160,height:160,objectFit:"cover",borderRadius:10,marginBottom:m.text?6:0}}/>}
+            {m.text && <div style={{fontSize:13}}>{m.text}</div>}
+          </div>
+        ))}
+      </div>
+
+      <div style={{padding:12,background:"#fff",borderTop:"1px solid #f0f0f0",display:"flex",gap:8,alignItems:"center"}}>
+        <label style={{ width:38,height:38,borderRadius:12,background:"#fff5f3",display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",flexShrink:0 }}>
+          📷
+          <input type="file" accept="image/*" onChange={handlePhotoUpload} style={{display:"none"}}/>
+        </label>
+        <input value={text} onChange={e=>setText(e.target.value)} onKeyDown={e=>e.key==="Enter"&&handleSend()}
+          placeholder={t.typeMessage} style={{flex:1,padding:"10px 14px",borderRadius:20,border:"1.5px solid #eee",fontSize:13,outline:"none"}}/>
+        <button onClick={handleSend} style={{ width:38,height:38,borderRadius:"50%",background:"linear-gradient(90deg,#ff6b35,#e8401c)",color:"#fff",border:"none",cursor:"pointer",fontSize:16,flexShrink:0 }}>➤</button>
+      </div>
+    </div>
+  );
+}
+
 function DetailModal({ p, lang, onClose, onAdd }) {
   const t = L[lang];
   const name = p[`name_${lang}`] || p.name_en || p.name_lo;
   const [shipper, setShipper] = useState("");
+  const [imgIdx, setImgIdx] = useState(0);
+  const images = (p.images && p.images.length > 0) ? p.images : null;
+
   return (
     <div style={{ position:"fixed",inset:0,zIndex:90,background:"rgba(0,0,0,0.5)",display:"flex",alignItems:"flex-end",justifyContent:"center" }} onClick={onClose}>
       <div onClick={e=>e.stopPropagation()} style={{ background:"#fff",borderRadius:"24px 24px 0 0",padding:24,width:"100%",maxWidth:480,maxHeight:"85vh",overflowY:"auto" }}>
-        <div style={{fontSize:80,textAlign:"center",background:"linear-gradient(135deg,#fff8f0,#fff0f8)",borderRadius:16,padding: p.image?0:"20px 0",marginBottom:16,overflow:"hidden",height: p.image?220:"auto"}}>
-          {p.image
-            ? <img src={p.image} alt="" style={{width:"100%",height:"100%",objectFit:"cover"}}/>
+        <div style={{position:"relative",background:"linear-gradient(135deg,#fff8f0,#fff0f8)",borderRadius:16,marginBottom:16,overflow:"hidden",aspectRatio:"1/1",display:"flex",alignItems:"center",justifyContent:"center",fontSize:80}}>
+          {images
+            ? <img src={images[imgIdx]} alt="" style={{width:"100%",height:"100%",objectFit:"cover"}}/>
             : (p.emoji||"📦")
           }
+          {images && images.length > 1 && (
+            <>
+              <button onClick={()=>setImgIdx(i=>i===0?images.length-1:i-1)} style={{position:"absolute",left:8,top:"50%",transform:"translateY(-50%)",width:32,height:32,borderRadius:"50%",background:"rgba(0,0,0,0.4)",color:"#fff",border:"none",cursor:"pointer",fontSize:16,display:"flex",alignItems:"center",justifyContent:"center"}}>‹</button>
+              <button onClick={()=>setImgIdx(i=>i===images.length-1?0:i+1)} style={{position:"absolute",right:8,top:"50%",transform:"translateY(-50%)",width:32,height:32,borderRadius:"50%",background:"rgba(0,0,0,0.4)",color:"#fff",border:"none",cursor:"pointer",fontSize:16,display:"flex",alignItems:"center",justifyContent:"center"}}>›</button>
+              <div style={{position:"absolute",bottom:10,left:0,right:0,display:"flex",justifyContent:"center",gap:5}}>
+                {images.map((_,i)=>(
+                  <span key={i} onClick={()=>setImgIdx(i)} style={{width:6,height:6,borderRadius:"50%",background:i===imgIdx?"#e8401c":"rgba(255,255,255,0.7)",cursor:"pointer"}}/>
+                ))}
+              </div>
+            </>
+          )}
         </div>
+        {images && images.length > 1 && (
+          <div style={{display:"flex",gap:6,marginBottom:14,overflowX:"auto"}}>
+            {images.map((img,i)=>(
+              <div key={i} onClick={()=>setImgIdx(i)} style={{ width:50,height:50,flexShrink:0,borderRadius:8,overflow:"hidden",cursor:"pointer", border: i===imgIdx?"2px solid #e8401c":"1.5px solid #eee" }}>
+                <img src={img} alt="" style={{width:"100%",height:"100%",objectFit:"cover"}}/>
+              </div>
+            ))}
+          </div>
+        )}
         <div style={{fontWeight:800,fontSize:20,marginBottom:4}}>{name}</div>
         <div style={{fontSize:13,color:"#888",marginBottom:8}}>🏪 {p.seller_name||"—"}</div>
         {p.description && <div style={{fontSize:13,color:"#555",marginBottom:12,lineHeight:1.5}}>{p.description}</div>}
@@ -536,16 +722,21 @@ function SellerDashboard({ seller, lang, onClose }) {
   const [showAdd, setShowAdd] = useState(false);
   const [loading, setLoading] = useState(true);
   const [translating, setTranslating] = useState(false);
-  const [form, setForm] = useState({ name_input:"", name_lo:"", name_en:"", name_zh:"", price:"", category:"fashion", emoji:"📦", image:"", description:"", badge:"" });
+  const [form, setForm] = useState({ name_input:"", name_lo:"", name_en:"", name_zh:"", price:"", category:"fashion", emoji:"📦", images:[], description:"", badge:"" });
   const setF = (k,v) => setForm(f=>({...f,[k]:v}));
 
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (ev) => setF("image", ev.target.result);
-    reader.readAsDataURL(file);
+  const handleImagesUpload = (e) => {
+    const files = Array.from(e.target.files || []);
+    if (!files.length) return;
+    const remaining = 6 - form.images.length;
+    const toAdd = files.slice(0, remaining);
+    toAdd.forEach(file => {
+      const reader = new FileReader();
+      reader.onload = (ev) => setForm(f => f.images.length < 6 ? { ...f, images: [...f.images, ev.target.result] } : f);
+      reader.readAsDataURL(file);
+    });
   };
+  const removeImage = (idx) => setForm(f => ({ ...f, images: f.images.filter((_,i)=>i!==idx) }));
 
   useEffect(() => {
     const load = async () => {
@@ -570,7 +761,7 @@ function SellerDashboard({ seller, lang, onClose }) {
     const payload = {
       name_lo: names.lo, name_en: names.en, name_zh: names.zh,
       price: parseInt(form.price)||0, category: form.category, emoji: form.emoji,
-      image: form.image, description: form.description, badge: form.badge,
+      images: form.images, description: form.description, badge: form.badge,
       seller_id: seller.id, seller_name: seller.name
     };
     try {
@@ -580,7 +771,7 @@ function SellerDashboard({ seller, lang, onClose }) {
       // Demo mode
       setProducts(p => [{ ...payload, id:"demo-"+Date.now() }, ...p]);
     }
-    setForm({ name_input:"", name_lo:"", name_en:"", name_zh:"", price:"", category:"fashion", emoji:"📦", image:"", description:"", badge:"" });
+    setForm({ name_input:"", name_lo:"", name_en:"", name_zh:"", price:"", category:"fashion", emoji:"📦", images:[], description:"", badge:"" });
     setShowAdd(false);
   };
 
@@ -642,23 +833,25 @@ function SellerDashboard({ seller, lang, onClose }) {
             <div style={{fontWeight:800,fontSize:15,marginBottom:16}}>➕ {t.addProduct}</div>
             <div style={{display:"flex",flexDirection:"column",gap:12}}>
               <div>
-                <span style={label}>📸 {t.productPhoto}</span>
-                <label style={{
-                  display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center",
-                  border:"2px dashed #e8e8e8", borderRadius:14, padding:"16px 0", cursor:"pointer",
-                  background: form.image?"#fff":"#fafafa", gap:8, minHeight: form.image ? "auto" : 90
-                }}>
-                  {form.image
-                    ? <img src={form.image} alt="product" style={{width:140,height:140,objectFit:"cover",borderRadius:10}}/>
-                    : <><span style={{fontSize:32}}>📷</span><span style={{fontSize:12,color:"#aaa"}}>{t.uploadPhoto}</span></>
-                  }
-                  <input type="file" accept="image/*" onChange={handleImageUpload} style={{display:"none"}}/>
-                </label>
-                {form.image && (
-                  <button onClick={()=>setF("image","")} style={{marginTop:6,background:"none",border:"1.5px solid #ffd0d0",color:"#e8401c",borderRadius:8,padding:"4px 12px",cursor:"pointer",fontSize:11,fontWeight:600}}>
-                    ✕ {lang==="lo"?"ລຶບຮູບ":lang==="en"?"Remove":"删除"}
-                  </button>
-                )}
+                <span style={label}>📸 {t.productPhoto} ({form.images.length}/6)</span>
+                <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:8}}>
+                  {form.images.map((img,idx)=>(
+                    <div key={idx} style={{position:"relative",aspectRatio:"1/1",borderRadius:12,overflow:"hidden",border:"1.5px solid #eee"}}>
+                      <img src={img} alt="" style={{width:"100%",height:"100%",objectFit:"cover"}}/>
+                      <button onClick={()=>removeImage(idx)} style={{position:"absolute",top:4,right:4,width:20,height:20,borderRadius:"50%",background:"rgba(0,0,0,0.6)",color:"#fff",border:"none",cursor:"pointer",fontSize:12,display:"flex",alignItems:"center",justifyContent:"center"}}>✕</button>
+                    </div>
+                  ))}
+                  {form.images.length < 6 && (
+                    <label style={{
+                      aspectRatio:"1/1", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center",
+                      border:"2px dashed #e8e8e8", borderRadius:12, cursor:"pointer", background:"#fafafa", gap:4
+                    }}>
+                      <span style={{fontSize:22}}>📷</span>
+                      <span style={{fontSize:9,color:"#aaa",textAlign:"center",padding:"0 4px"}}>{t.uploadPhoto}</span>
+                      <input type="file" accept="image/*" multiple onChange={handleImagesUpload} style={{display:"none"}}/>
+                    </label>
+                  )}
+                </div>
               </div>
               <div>
                 <span style={label}>{t.emoji}</span>
@@ -718,7 +911,9 @@ function SellerDashboard({ seller, lang, onClose }) {
             : <div style={{display:"flex",flexDirection:"column",gap:10}}>
                 {products.map(p=>(
                   <div key={p.id} style={{background:"#fff",borderRadius:14,padding:"12px 16px",display:"flex",alignItems:"center",gap:12,boxShadow:"0 2px 8px rgba(0,0,0,0.05)"}}>
-                    <span style={{fontSize:36}}>{p.emoji||"📦"}</span>
+                    <div style={{width:44,height:44,borderRadius:10,overflow:"hidden",flexShrink:0,background:"#fafafa",display:"flex",alignItems:"center",justifyContent:"center",fontSize:24}}>
+                      {p.images && p.images[0] ? <img src={p.images[0]} alt="" style={{width:"100%",height:"100%",objectFit:"cover"}}/> : (p.emoji||"📦")}
+                    </div>
                     <div style={{flex:1}}>
                       <div style={{fontWeight:700,fontSize:13}}>{p[`name_${lang}`]||p.name_en||p.name_lo}</div>
                       <div style={{fontSize:12,color:"#e8401c",fontWeight:700}}>{fmt(p.price)}</div>
@@ -736,6 +931,57 @@ function SellerDashboard({ seller, lang, onClose }) {
 }
 
 // ─── MAIN APP ─────────────────────────────────────────────────────────────────
+// ─── MESSAGES INBOX ───────────────────────────────────────────────────────────
+function MessagesInbox({ lang, onClose, onOpenChat }) {
+  const t = L[lang];
+  const [phone, setPhone] = useState("");
+  const [searched, setSearched] = useState(false);
+  const [conversations, setConversations] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const search = async () => {
+    if (!phone.trim()) return;
+    setLoading(true); setSearched(true);
+    try {
+      const data = await sbFetch(`conversations?buyer_phone=eq.${encodeURIComponent(phone.trim())}&order=created_at.desc`);
+      setConversations(data || []);
+    } catch { setConversations([]); }
+    setLoading(false);
+  };
+
+  return (
+    <div style={{ position:"fixed",inset:0,zIndex:140,background:"#f7f7f9",display:"flex",flexDirection:"column" }}>
+      <div style={{ background:"linear-gradient(90deg,#ff6b35,#e8401c)",padding:"16px 20px",color:"#fff",display:"flex",justifyContent:"space-between",alignItems:"center" }}>
+        <div style={{fontWeight:900,fontSize:17}}>💬 {t.messages}</div>
+        <button onClick={onClose} style={{background:"rgba(255,255,255,0.2)",border:"none",color:"#fff",borderRadius:10,padding:"8px 14px",cursor:"pointer",fontWeight:700}}>× {t.close}</button>
+      </div>
+      <div style={{padding:16}}>
+        <div style={{display:"flex",gap:8}}>
+          <input value={phone} onChange={e=>setPhone(e.target.value)} onKeyDown={e=>e.key==="Enter"&&search()} placeholder={t.yourBuyerPhone} style={{
+            flex:1, padding:"10px 14px", borderRadius:12, border:"1.5px solid #eee", fontSize:13, outline:"none"
+          }}/>
+          <button onClick={search} style={{ background:"linear-gradient(90deg,#ff6b35,#e8401c)",color:"#fff",border:"none",borderRadius:12,padding:"10px 18px",cursor:"pointer",fontWeight:700,fontSize:13 }}>🔍</button>
+        </div>
+      </div>
+      <div style={{flex:1,overflowY:"auto",padding:"0 16px 16px",display:"flex",flexDirection:"column",gap:10}}>
+        {loading && <div style={{textAlign:"center",color:"#bbb",marginTop:40}}>{t.loading}</div>}
+        {!loading && searched && conversations.length===0 && (
+          <div style={{textAlign:"center",color:"#bbb",marginTop:40}}>📭<br/><span style={{fontSize:13}}>{t.noConversations}</span></div>
+        )}
+        {conversations.map(c=>(
+          <div key={c.id} onClick={()=>onOpenChat(c)} style={{ background:"#fff",borderRadius:14,padding:14,cursor:"pointer",boxShadow:"0 2px 8px rgba(0,0,0,0.05)",display:"flex",justifyContent:"space-between",alignItems:"center" }}>
+            <div>
+              <div style={{fontWeight:700,fontSize:13}}>🏪 {c.seller_name}</div>
+              <div style={{fontSize:11,color:"#888",marginTop:2}}>📦 {c.shipper} · {c.village}</div>
+            </div>
+            <div style={{fontWeight:800,color:"#e8401c",fontSize:13}}>{fmt(c.total)}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function App() {
   const [lang, setLang]             = useState("lo");
   const [cat, setCat]               = useState("all");
@@ -748,6 +994,9 @@ export default function App() {
   const [currentSeller, setCurrentSeller] = useState(null);
   const [dbProducts, setDbProducts] = useState([]);
   const [activeTab, setActiveTab]   = useState("home"); // home | sell
+  const [activeChat, setActiveChat] = useState(null);
+  const [showInbox, setShowInbox]   = useState(false);
+  const [myPhone, setMyPhone]       = useState("");
 
   const t = L[lang];
 
@@ -869,6 +1118,7 @@ export default function App() {
         {[
           { icon:"🏠", label:t.home, tab:"home" },
           { icon:"🔍", label:lang==="lo"?"ຄົ້ນຫາ":lang==="en"?"Search":"搜索", tab:"search" },
+          { icon:"💬", label:t.messages, action:()=>setShowInbox(true) },
           { icon:"🛒", label:t.cart, action:()=>setShowCart(true), badge:cartCount },
           { icon:"🏪", label:t.sell, action:()=>{ currentSeller?setActiveTab("sell"):setShowSellerReg(true); } },
         ].map((item,i)=>(
@@ -880,10 +1130,12 @@ export default function App() {
         ))}
       </div>
 
-      {showCart&&<CartDrawer cart={cart} lang={lang} onClose={()=>setShowCart(false)} onQty={updateQty}/>}
+      {showCart&&<CartDrawer cart={cart} lang={lang} onClose={()=>setShowCart(false)} onQty={updateQty} onOpenChat={(conv)=>{setActiveChat(conv);setShowCart(false);}}/>}
       {detail&&<DetailModal p={detail} lang={lang} onClose={()=>setDetail(null)} onAdd={addToCart}/>}
       {showSellerReg&&<SellerRegModal lang={lang} onClose={()=>setShowSellerReg(false)} onSuccess={seller=>{setCurrentSeller(seller);setShowSellerReg(false);setActiveTab("sell");}}/>}
       {showSellerLogin&&<SellerLoginModal lang={lang} onClose={()=>setShowSellerLogin(false)} onSuccess={seller=>{setCurrentSeller(seller);setShowSellerLogin(false);setActiveTab("sell");}} onGoRegister={()=>{setShowSellerLogin(false);setShowSellerReg(true);}}/>}
+      {showInbox&&<MessagesInbox lang={lang} onClose={()=>setShowInbox(false)} onOpenChat={(conv)=>{setActiveChat(conv);setShowInbox(false);}}/>}
+      {activeChat&&<ChatModal conversation={activeChat} lang={lang} onClose={()=>setActiveChat(null)}/>}
     </div>
   );
 }
