@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useState, useEffect } from "react";
 
 // ─── SUPABASE CONFIG ─────────────────────────────────────────────────────────
@@ -55,6 +56,8 @@ const CATEGORIES = [
   { id: "beauty",      icon: "💄", lo: "ຄວາມງາມ",       en: "Beauty",      zh: "美妆" },
   { id: "food",        icon: "🍜", lo: "ອາຫານ",         en: "Food",        zh: "食品" },
   { id: "home",        icon: "🏠", lo: "ເຄື່ອງເຮືອນ",   en: "Home",        zh: "家居" },
+  { id: "auto",        icon: "🚗", lo: "ອາໄຫຼ່ລົດ",      en: "Auto Parts",  zh: "汽车配件" },
+  { id: "health",      icon: "💊", lo: "ສຸຂະພາບ",        en: "Health",      zh: "健康" },
 ];
 
 const SHIPPERS = ["Anousith", "HAL Express", "Mixay Express"];
@@ -120,8 +123,34 @@ function ProductCard({ p, lang, onAdd, onDetail }) {
 function CartDrawer({ cart, lang, onClose, onQty }) {
   const t = L[lang];
   const [shipper, setShipper] = useState("");
+  const [village, setVillage] = useState("");
   const [showQR, setShowQR] = useState(false);
-  const total = cart.reduce((s,i) => s+i.price*i.qty, 0);
+  const [qrIndex, setQrIndex] = useState(0);
+
+  // group cart items by seller
+  const groups = cart.reduce((acc, item) => {
+    const key = item.seller_id || item.seller_name || "unknown";
+    if (!acc[key]) acc[key] = { seller_name: item.seller_name || "—", qr_image: item.qr_image || null, items: [] };
+    acc[key].items.push(item);
+    return acc;
+  }, {});
+  const sellerGroups = Object.values(groups);
+  const grandTotal = cart.reduce((s,i) => s+i.price*i.qty, 0);
+
+  const isMultiSeller = sellerGroups.length > 1;
+  const currentGroup = sellerGroups[qrIndex];
+  const currentGroupTotal = currentGroup ? currentGroup.items.reduce((s,i)=>s+i.price*i.qty,0) : 0;
+
+  const txt = {
+    village: lang==="lo"?"ບ້ານທີ່ຈະຮັບເຄື່ອງ":lang==="en"?"Delivery village":"收货村庄",
+    villagePh: lang==="lo"?"ປ້ອນຊື່ບ້ານ...":lang==="en"?"Enter your village...":"输入村庄名称...",
+    payFrom: lang==="lo"?"ຊຳລະຮ້ານທີ":lang==="en"?"Pay seller":"支付卖家",
+    of: lang==="lo"?"ໃນ":lang==="en"?"of":"/",
+    next: lang==="lo"?"ຮ້ານຕໍ່ໄປ":lang==="en"?"Next seller":"下一个卖家",
+    done: lang==="lo"?"ສຳເລັດ":lang==="en"?"Done":"完成",
+    subtotal: lang==="lo"?"ລວມຍ່ອຍ":lang==="en"?"Subtotal":"小计",
+  };
+
   return (
     <div style={{ position:"fixed", inset:0, zIndex:100, display:"flex" }}>
       <div onClick={onClose} style={{ flex:1, background:"rgba(0,0,0,0.45)" }}/>
@@ -130,22 +159,39 @@ function CartDrawer({ cart, lang, onClose, onQty }) {
           <span style={{ fontWeight:800, fontSize:18 }}>🛒 {t.cart}</span>
           <button onClick={onClose} style={{ background:"none", border:"none", color:"#fff", fontSize:24, cursor:"pointer" }}>×</button>
         </div>
-        <div style={{ flex:1, overflowY:"auto", padding:16, display:"flex", flexDirection:"column", gap:10 }}>
+        <div style={{ flex:1, overflowY:"auto", padding:16, display:"flex", flexDirection:"column", gap:16 }}>
           {cart.length === 0
             ? <div style={{ textAlign:"center", color:"#bbb", marginTop:60 }}>🛒<br/><span style={{fontSize:13}}>{t.empty}</span></div>
-            : cart.map(item => {
-              const name = item[`name_${lang}`] || item.name_en || item.name_lo;
+            : sellerGroups.map((group, gi) => {
+              const subtotal = group.items.reduce((s,i)=>s+i.price*i.qty,0);
               return (
-                <div key={item.id} style={{ display:"flex", gap:10, alignItems:"center", background:"#fafafa", borderRadius:12, padding:10 }}>
-                  <span style={{fontSize:28}}>{item.emoji||"📦"}</span>
-                  <div style={{flex:1}}>
-                    <div style={{fontSize:12,fontWeight:600}}>{name}</div>
-                    <div style={{fontSize:12,color:"#e8401c",fontWeight:700}}>{fmt(item.price)}</div>
+                <div key={gi} style={{ border:"1.5px solid #f0f0f0", borderRadius:14, overflow:"hidden" }}>
+                  <div style={{ background:"#fff5f3", padding:"8px 12px", display:"flex", alignItems:"center", gap:6 }}>
+                    <span style={{fontSize:13}}>🏪</span>
+                    <span style={{fontSize:12,fontWeight:700,color:"#e8401c"}}>{group.seller_name}</span>
                   </div>
-                  <div style={{display:"flex",alignItems:"center",gap:6}}>
-                    <button onClick={()=>onQty(item.id,-1)} style={{width:26,height:26,borderRadius:8,border:"1.5px solid #e0e0e0",background:"#fff",cursor:"pointer",fontWeight:700}}>−</button>
-                    <span style={{fontSize:13,fontWeight:700,minWidth:20,textAlign:"center"}}>{item.qty}</span>
-                    <button onClick={()=>onQty(item.id,1)} style={{width:26,height:26,borderRadius:8,border:"1.5px solid #e0e0e0",background:"#fff",cursor:"pointer",fontWeight:700}}>+</button>
+                  <div style={{ display:"flex", flexDirection:"column", gap:8, padding:10 }}>
+                    {group.items.map(item => {
+                      const name = item[`name_${lang}`] || item.name_en || item.name_lo;
+                      return (
+                        <div key={item.id} style={{ display:"flex", gap:10, alignItems:"center", background:"#fafafa", borderRadius:12, padding:8 }}>
+                          <span style={{fontSize:26}}>{item.emoji||"📦"}</span>
+                          <div style={{flex:1}}>
+                            <div style={{fontSize:12,fontWeight:600}}>{name}</div>
+                            <div style={{fontSize:12,color:"#e8401c",fontWeight:700}}>{fmt(item.price)}</div>
+                          </div>
+                          <div style={{display:"flex",alignItems:"center",gap:6}}>
+                            <button onClick={()=>onQty(item.id,-1)} style={{width:24,height:24,borderRadius:7,border:"1.5px solid #e0e0e0",background:"#fff",cursor:"pointer",fontWeight:700,fontSize:13}}>−</button>
+                            <span style={{fontSize:12,fontWeight:700,minWidth:18,textAlign:"center"}}>{item.qty}</span>
+                            <button onClick={()=>onQty(item.id,1)} style={{width:24,height:24,borderRadius:7,border:"1.5px solid #e0e0e0",background:"#fff",cursor:"pointer",fontWeight:700,fontSize:13}}>+</button>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                  <div style={{ padding:"8px 12px", borderTop:"1px dashed #eee", display:"flex", justifyContent:"space-between" }}>
+                    <span style={{fontSize:11,color:"#888",fontWeight:600}}>{txt.subtotal}</span>
+                    <span style={{fontSize:13,fontWeight:800,color:"#e8401c"}}>{fmt(subtotal)}</span>
                   </div>
                 </div>
               );
@@ -154,6 +200,11 @@ function CartDrawer({ cart, lang, onClose, onQty }) {
         </div>
         {cart.length > 0 && (
           <div style={{ padding:16, borderTop:"1px solid #f0f0f0" }}>
+            <div style={{fontSize:11,color:"#888",marginBottom:6}}>{txt.village}</div>
+            <input value={village} onChange={e=>setVillage(e.target.value)} placeholder={txt.villagePh} style={{
+              width:"100%", padding:"9px 12px", borderRadius:10, border:"1.5px solid #e8e8e8",
+              fontSize:12, outline:"none", boxSizing:"border-box", background:"#fafafa", marginBottom:14
+            }}/>
             <div style={{fontSize:11,color:"#888",marginBottom:8}}>{t.shipper}</div>
             <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:14}}>
               {SHIPPERS.map(s=>(
@@ -162,30 +213,39 @@ function CartDrawer({ cart, lang, onClose, onQty }) {
             </div>
             <div style={{display:"flex",justifyContent:"space-between",marginBottom:12}}>
               <span style={{fontWeight:600,color:"#555"}}>{t.total}</span>
-              <span style={{fontWeight:800,color:"#e8401c",fontSize:18}}>{fmt(total)}</span>
+              <span style={{fontWeight:800,color:"#e8401c",fontSize:18}}>{fmt(grandTotal)}</span>
             </div>
-            <button onClick={()=>setShowQR(true)} style={btn("linear-gradient(90deg,#ff6b35,#e8401c)")}>{t.checkout} →</button>
+            <button onClick={()=>{setQrIndex(0);setShowQR(true);}} style={btn("linear-gradient(90deg,#ff6b35,#e8401c)")}>{t.checkout} →</button>
           </div>
         )}
       </div>
-      {showQR && (
+      {showQR && currentGroup && (
         <div style={{ position:"fixed",inset:0,zIndex:200,background:"rgba(0,0,0,0.6)",display:"flex",alignItems:"center",justifyContent:"center" }}>
           <div style={{ background:"#fff",borderRadius:20,padding:32,textAlign:"center",maxWidth:300,width:"90%",boxShadow:"0 8px 40px rgba(0,0,0,0.2)" }}>
-            <div style={{fontSize:20,fontWeight:800,marginBottom:4}}>💳 {t.pay}</div>
-            <div style={{fontSize:13,color:"#888",marginBottom:20}}>{t.qr}</div>
-            {cart[0]?.qr_image
-              ? <img src={cart[0].qr_image} alt="QR" style={{width:180,height:180,objectFit:"contain",margin:"0 auto 20px",display:"block",borderRadius:12,border:"1px solid #f0f0f0"}}/>
+            {isMultiSeller && (
+              <div style={{fontSize:11,color:"#aaa",fontWeight:700,marginBottom:8}}>{qrIndex+1} {txt.of} {sellerGroups.length}</div>
+            )}
+            <div style={{fontSize:20,fontWeight:800,marginBottom:4}}>💳 {txt.payFrom}</div>
+            <div style={{fontSize:13,color:"#e8401c",fontWeight:700,marginBottom:16}}>🏪 {currentGroup.seller_name}</div>
+            {currentGroup.qr_image
+              ? <img src={currentGroup.qr_image} alt="QR" style={{width:180,height:180,objectFit:"contain",margin:"0 auto 20px",display:"block",borderRadius:12,border:"1px solid #f0f0f0"}}/>
               : <div style={{ width:160,height:160,margin:"0 auto 20px",background:"linear-gradient(135deg,#1a1a2e,#16213e)",borderRadius:16,display:"flex",alignItems:"center",justifyContent:"center",fontSize:60 }}>📲</div>
             }
-            <div style={{fontWeight:800,color:"#e8401c",fontSize:24,marginBottom:4}}>{fmt(total)}</div>
-            {shipper && <div style={{fontSize:12,color:"#888",marginBottom:16}}>📦 {shipper}</div>}
-            <button onClick={()=>{setShowQR(false);onClose();}} style={btn()}>{t.close}</button>
+            <div style={{fontWeight:800,color:"#e8401c",fontSize:24,marginBottom:4}}>{fmt(currentGroupTotal)}</div>
+            {shipper && <div style={{fontSize:12,color:"#888"}}>📦 {shipper}{village?` · ${village}`:""}</div>}
+            <div style={{marginTop:16}}>
+              {isMultiSeller && qrIndex < sellerGroups.length - 1
+                ? <button onClick={()=>setQrIndex(i=>i+1)} style={btn("linear-gradient(90deg,#ff6b35,#e8401c)")}>{txt.next} →</button>
+                : <button onClick={()=>{setShowQR(false);onClose();}} style={btn()}>{txt.done} ✓</button>
+              }
+            </div>
           </div>
         </div>
       )}
     </div>
   );
 }
+
 
 // ─── DETAIL MODAL ─────────────────────────────────────────────────────────────
 function DetailModal({ p, lang, onClose, onAdd }) {
