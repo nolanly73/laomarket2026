@@ -22,6 +22,29 @@ async function sbFetch(path, options = {}) {
   return text ? JSON.parse(text) : null;
 }
 
+// Upload image to Supabase Storage — returns public URL
+async function uploadImage(file, folder="products") {
+  const ext = file.name.split(".").pop() || "jpg";
+  const filename = `${folder}/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+  const res = await fetch(`${SUPABASE_URL}/storage/v1/object/images/${filename}`, {
+    method: "POST",
+    headers: {
+      "apikey": SUPABASE_KEY,
+      "Authorization": `Bearer ${SUPABASE_KEY}`,
+      "Content-Type": file.type || "image/jpeg",
+    },
+    body: file,
+  });
+  if (!res.ok) throw new Error(await res.text());
+  return `${SUPABASE_URL}/storage/v1/object/public/images/${filename}`;
+}
+
+// Upload multiple images, return array of URLs
+async function uploadImages(files, folder="products") {
+  const urls = await Promise.all(files.map(f => uploadImage(f, folder)));
+  return urls;
+}
+
 async function translateProductName(text, fromLang) {
   try {
     const res = await fetch("https://api.anthropic.com/v1/messages", {
@@ -493,12 +516,18 @@ function ChatModal({ conversation, lang, onClose }) {
     setText("");
   };
 
-  const handlePhotoUpload = (e) => {
+  const handlePhotoUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (ev) => send("", ev.target.result);
-    reader.readAsDataURL(file);
+    try {
+      const url = await uploadImage(file, "proofs");
+      send("", url);
+    } catch {
+      // Fallback to base64
+      const reader = new FileReader();
+      reader.onload = (ev) => send("", ev.target.result);
+      reader.readAsDataURL(file);
+    }
   };
 
   const submitRating = async (stars) => {
@@ -735,15 +764,19 @@ function SellerRegModal({ lang, onClose, onSuccess }) {
   const [form, setForm] = useState({ name:"", phone:"", password:"", whatsapp:"", village:"", shipper:"Anousith", qr_label:"", qr_image:"", category:"fashion" });
   const [qrPreview, setQrPreview] = useState("");
 
-  const handleQrUpload = (e) => {
+  const handleQrUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      setQrPreview(ev.target.result);
-      set("qr_image", ev.target.result);
-    };
-    reader.readAsDataURL(file);
+    try {
+      const url = await uploadImage(file, "qr");
+      setQrPreview(url);
+      set("qr_image", url);
+    } catch {
+      // Fallback to base64
+      const reader = new FileReader();
+      reader.onload = (ev) => { setQrPreview(ev.target.result); set("qr_image", ev.target.result); };
+      reader.readAsDataURL(file);
+    }
   };
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -876,27 +909,45 @@ function SellerDashboard({ seller, lang, onClose }) {
     prev.includes(s) ? prev.filter(x=>x!==s) : [...prev, s]
   );
 
-  const handleImagesUpload = (e) => {
+  const [uploading, setUploading] = useState(false);
+
+  const handleImagesUpload = async (e) => {
     const files = Array.from(e.target.files || []);
     if (!files.length) return;
     const remaining = 6 - form.images.length;
-    files.slice(0, remaining).forEach(file => {
-      const reader = new FileReader();
-      reader.onload = (ev) => setForm(f => f.images.length < 6 ? { ...f, images: [...f.images, ev.target.result] } : f);
-      reader.readAsDataURL(file);
-    });
+    const toAdd = files.slice(0, remaining);
+    setUploading(true);
+    try {
+      const urls = await uploadImages(toAdd, "products");
+      setForm(f => ({ ...f, images: [...f.images, ...urls].slice(0, 6) }));
+    } catch {
+      // Fallback to base64 if storage fails
+      toAdd.forEach(file => {
+        const reader = new FileReader();
+        reader.onload = (ev) => setForm(f => f.images.length < 6 ? { ...f, images: [...f.images, ev.target.result] } : f);
+        reader.readAsDataURL(file);
+      });
+    }
+    setUploading(false);
   };
   const removeImage = (idx) => setForm(f => ({ ...f, images: f.images.filter((_,i)=>i!==idx) }));
 
-  const handleQrUpload = (e) => {
+  const handleQrUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      setQrImage(ev.target.result);
-      sbFetch(`sellers?id=eq.${seller.id}`, { method:"PATCH", prefer:"return=minimal", body: JSON.stringify({ qr_image: ev.target.result }) }).catch(()=>{});
-    };
-    reader.readAsDataURL(file);
+    try {
+      const url = await uploadImage(file, "qr");
+      setQrImage(url);
+      sbFetch(`sellers?id=eq.${seller.id}`, { method:"PATCH", prefer:"return=minimal", body: JSON.stringify({ qr_image: url }) }).catch(()=>{});
+    } catch {
+      // Fallback to base64
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        setQrImage(ev.target.result);
+        sbFetch(`sellers?id=eq.${seller.id}`, { method:"PATCH", prefer:"return=minimal", body: JSON.stringify({ qr_image: ev.target.result }) }).catch(()=>{});
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const deleteQr = async () => {
@@ -1037,11 +1088,11 @@ function SellerDashboard({ seller, lang, onClose }) {
                   {form.images.length < 6 && (
                     <label style={{
                       aspectRatio:"1/1", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center",
-                      border:"2px dashed #e8e8e8", borderRadius:12, cursor:"pointer", background:"#fafafa", gap:4
+                      border:"2px dashed #e8e8e8", borderRadius:12, cursor:"pointer", background: uploading?"#fff5f3":"#fafafa", gap:4
                     }}>
-                      <span style={{fontSize:22}}>📷</span>
-                      <span style={{fontSize:9,color:"#aaa",textAlign:"center",padding:"0 4px"}}>{t.uploadPhoto}</span>
-                      <input type="file" accept="image/*" multiple onChange={handleImagesUpload} style={{display:"none"}}/>
+                      <span style={{fontSize:22}}>{uploading?"⏳":"📷"}</span>
+                      <span style={{fontSize:9,color:"#aaa",textAlign:"center",padding:"0 4px"}}>{uploading?(lang==="lo"?"ກຳລັງອັບໂຫຼດ...":lang==="en"?"Uploading...":"上传中..."):t.uploadPhoto}</span>
+                      <input type="file" accept="image/*" multiple onChange={handleImagesUpload} disabled={uploading} style={{display:"none"}}/>
                     </label>
                   )}
                 </div>
