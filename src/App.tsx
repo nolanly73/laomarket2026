@@ -288,7 +288,12 @@ function CartDrawer({ cart, lang, onClose, onQty, onOpenChat }) {
                       const name = item[`name_${lang}`] || item.name_en || item.name_lo;
                       return (
                         <div key={item.id} style={{ display:"flex", gap:10, alignItems:"center", background:"#fafafa", borderRadius:12, padding:8 }}>
-                          <span style={{fontSize:26}}>{item.emoji||"📦"}</span>
+                          <div style={{width:44,height:44,borderRadius:10,overflow:"hidden",flexShrink:0,background:"#fff0f0",display:"flex",alignItems:"center",justifyContent:"center",fontSize:22}}>
+                            {item.images&&item.images[0]
+                              ? <img src={item.images[0]} alt="" style={{width:"100%",height:"100%",objectFit:"cover"}}/>
+                              : (item.emoji||"📦")
+                            }
+                          </div>
                           <div style={{flex:1}}>
                             <div style={{fontSize:12,fontWeight:600}}>{name}</div>
                             <div style={{fontSize:12,color:"#e8401c",fontWeight:700}}>{fmt(item.price)}</div>
@@ -373,31 +378,112 @@ function CartDrawer({ cart, lang, onClose, onQty, onOpenChat }) {
 
 // ─── DETAIL MODAL ─────────────────────────────────────────────────────────────
 // ─── CHAT MODAL ───────────────────────────────────────────────────────────────
+// ─── SELLER SHOP MODAL ────────────────────────────────────────────────────────
+function SellerShopModal({ sellerId, sellerName, lang, onClose, onAdd }) {
+  const t = L[lang];
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const data = await sbFetch(`products?seller_id=eq.${sellerId}&order=created_at.desc`);
+        setProducts(data || []);
+      } catch { setProducts([]); }
+      setLoading(false);
+    };
+    load();
+  }, [sellerId]);
+
+  return (
+    <div style={{ position:"fixed",inset:0,zIndex:95,background:"rgba(0,0,0,0.5)",display:"flex",alignItems:"flex-end",justifyContent:"center" }} onClick={onClose}>
+      <div onClick={e=>e.stopPropagation()} style={{ background:"#f7f7f9",borderRadius:"24px 24px 0 0",width:"100%",maxWidth:500,maxHeight:"85vh",display:"flex",flexDirection:"column" }}>
+        <div style={{background:"linear-gradient(90deg,#ff6b35,#e8401c)",padding:"16px 20px",color:"#fff",borderRadius:"24px 24px 0 0",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+          <div style={{fontWeight:900,fontSize:16}}>🏪 {sellerName}</div>
+          <button onClick={onClose} style={{background:"rgba(255,255,255,0.2)",border:"none",color:"#fff",borderRadius:10,padding:"6px 12px",cursor:"pointer",fontWeight:700}}>×</button>
+        </div>
+        <div style={{flex:1,overflowY:"auto",padding:16}}>
+          {loading && <div style={{textAlign:"center",color:"#bbb",padding:40}}>{t.loading}</div>}
+          {!loading && products.length===0 && <div style={{textAlign:"center",color:"#bbb",padding:40}}>📭</div>}
+          <div style={{display:"grid",gridTemplateColumns:"repeat(2,1fr)",gap:12}}>
+            {products.map(p=>{
+              const name = p[`name_${lang}`]||p.name_en||p.name_lo;
+              return (
+                <div key={p.id} style={{background:"#fff",borderRadius:14,overflow:"hidden",boxShadow:"0 2px 8px rgba(0,0,0,0.07)"}}>
+                  <div style={{aspectRatio:"1/1",background:"linear-gradient(135deg,#fff8f0,#fff0f8)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:40,overflow:"hidden"}}>
+                    {p.images&&p.images[0]?<img src={p.images[0]} alt="" style={{width:"100%",height:"100%",objectFit:"cover"}}/>:(p.emoji||"📦")}
+                  </div>
+                  <div style={{padding:"10px 12px"}}>
+                    <div style={{fontSize:12,fontWeight:600,marginBottom:4}}>{name}</div>
+                    <div style={{fontSize:13,fontWeight:800,color:"#e8401c",marginBottom:8}}>{fmt(p.price)}</div>
+                    <button onClick={()=>{onAdd(p);onClose();}} style={btn("linear-gradient(90deg,#ff6b35,#e8401c)",undefined,{padding:"7px 0",fontSize:11})}>{t.add}</button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function ChatModal({ conversation, lang, onClose }) {
   const t = L[lang];
   const [messages, setMessages] = useState([]);
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(true);
-  const fileInputRef = { current: null };
+  const [confirmed, setConfirmed] = useState(conversation.payment_confirmed || false);
+  const [rating, setRating] = useState(0);
+  const [ratingDone, setRatingDone] = useState(false);
+  const bottomRef = { current: null };
 
   const loadMessages = async () => {
     try {
       const data = await sbFetch(`messages?conversation_id=eq.${conversation.id}&order=created_at.asc`);
       setMessages(data || []);
-    } catch { /* demo mode keeps local messages */ }
+      // Check if already confirmed
+      const convData = await sbFetch(`conversations?id=eq.${conversation.id}`);
+      if (convData && convData[0]?.payment_confirmed) setConfirmed(true);
+    } catch {}
     setLoading(false);
   };
 
-  useEffect(() => { loadMessages(); }, [conversation.id]);
+  useEffect(() => {
+    // Point 7: auto-send proof request message on first open
+    const init = async () => {
+      await loadMessages();
+    };
+    init();
+  }, [conversation.id]);
 
-  const send = async (text, image) => {
-    if (!text && !image) return;
-    const payload = { conversation_id: conversation.id, sender: "buyer", text: text||"", image: image||"" };
+  const send = async (msgText, image, sender="buyer") => {
+    if (!msgText && !image) return;
+    const payload = { conversation_id: conversation.id, sender, text: msgText||"", image: image||"" };
+    let newMsg = { ...payload, id:"demo-"+Date.now() };
     try {
       const data = await sbFetch("messages", { method:"POST", body: JSON.stringify(payload) });
-      setMessages(m => [...m, data[0]]);
-    } catch {
-      setMessages(m => [...m, { ...payload, id:"demo-"+Date.now() }]);
+      newMsg = data[0];
+    } catch {}
+    setMessages(m => [...m, newMsg]);
+
+    // Point 4: if buyer sends photo → auto-confirm payment
+    if (image && sender==="buyer" && !confirmed) {
+      setConfirmed(true);
+      try {
+        await sbFetch(`conversations?id=eq.${conversation.id}`, { method:"PATCH", prefer:"return=minimal", body: JSON.stringify({ payment_confirmed: true }) });
+      } catch {}
+      // Auto system message confirming payment
+      const sysMsg = lang==="lo"?"✅ ຮັບເງິນສຳເລັດ — ຂອບໃຈ!":lang==="en"?"✅ Payment received — Thank you!":"✅ 收款成功 — 谢谢！";
+      const sysPayload = { conversation_id: conversation.id, sender:"seller", text: sysMsg, image:"" };
+      let sysNew = { ...sysPayload, id:"sys-"+Date.now() };
+      try {
+        const sd = await sbFetch("messages", { method:"POST", body: JSON.stringify(sysPayload) });
+        sysNew = sd[0];
+      } catch {}
+      setTimeout(() => {
+        setMessages(m => [...m, sysNew]);
+      }, 800);
     }
   };
 
@@ -415,6 +501,28 @@ function ChatModal({ conversation, lang, onClose }) {
     reader.readAsDataURL(file);
   };
 
+  const submitRating = async (stars) => {
+    setRating(stars);
+    setRatingDone(true);
+    // Save rating on each product in conversation
+    const ratingMsg = `${"⭐".repeat(stars)} ${lang==="lo"?"ຂອບໃຈ ທ່ານໄດ້ໃຫ້ຄະແນນ":lang==="en"?"Thanks! You rated":"谢谢！您评了"} ${stars}/5`;
+    await send(ratingMsg);
+    // Update product ratings
+    try {
+      for (const item of (conversation.items||[])) {
+        if (item.id) {
+          const prod = await sbFetch(`products?id=eq.${item.id}`);
+          if (prod && prod[0]) {
+            const oldRating = prod[0].rating || 5;
+            const oldSold = prod[0].sold || 0;
+            const newRating = ((oldRating * oldSold) + stars) / (oldSold + 1);
+            await sbFetch(`products?id=eq.${item.id}`, { method:"PATCH", prefer:"return=minimal", body: JSON.stringify({ rating: Math.round(newRating*10)/10, sold: oldSold+item.qty }) });
+          }
+        }
+      }
+    } catch {}
+  };
+
   return (
     <div style={{ position:"fixed",inset:0,zIndex:160,background:"#f7f7f9",display:"flex",flexDirection:"column" }}>
       <div style={{ background:"linear-gradient(90deg,#ff6b35,#e8401c)",padding:"16px 20px",color:"#fff",display:"flex",justifyContent:"space-between",alignItems:"center" }}>
@@ -426,14 +534,17 @@ function ChatModal({ conversation, lang, onClose }) {
       </div>
 
       <div style={{flex:1,overflowY:"auto",padding:16,display:"flex",flexDirection:"column",gap:10}}>
-        {/* Welcome + order summary bubble */}
+        {/* Welcome + order summary + proof request — always shown first */}
         <div style={{alignSelf:"flex-start",maxWidth:"85%",background:"#fff",borderRadius:"4px 16px 16px 16px",padding:14,boxShadow:"0 2px 8px rgba(0,0,0,0.06)"}}>
           <div style={{fontWeight:700,fontSize:13,marginBottom:8}}>👋 {t.welcomeMsg}, {conversation.buyer_name||""}!</div>
           <div style={{fontSize:11,color:"#888",fontWeight:700,marginBottom:4}}>{t.orderSummary}</div>
           <div style={{display:"flex",flexDirection:"column",gap:4,marginBottom:8}}>
             {(conversation.items||[]).map((it,i)=>(
-              <div key={i} style={{display:"flex",justifyContent:"space-between",fontSize:12}}>
-                <span>{it.emoji||"📦"} {it[`name_${lang}`]||it.name_en||it.name_lo} ×{it.qty}</span>
+              <div key={i} style={{display:"flex",alignItems:"center",gap:8,fontSize:12}}>
+                <div style={{width:32,height:32,borderRadius:8,overflow:"hidden",flexShrink:0,background:"#fafafa",display:"flex",alignItems:"center",justifyContent:"center",fontSize:16}}>
+                  {it.images&&it.images[0]?<img src={it.images[0]} alt="" style={{width:"100%",height:"100%",objectFit:"cover"}}/>:(it.emoji||"📦")}
+                </div>
+                <span style={{flex:1}}>{it[`name_${lang}`]||it.name_en||it.name_lo} ×{it.qty}</span>
                 <span style={{fontWeight:700,color:"#e8401c"}}>{fmt(it.price*it.qty)}</span>
               </div>
             ))}
@@ -441,10 +552,18 @@ function ChatModal({ conversation, lang, onClose }) {
           <div style={{borderTop:"1px dashed #eee",paddingTop:8,fontSize:12,display:"flex",justifyContent:"space-between",fontWeight:800}}>
             <span>{t.total}</span><span style={{color:"#e8401c"}}>{fmt(conversation.total)}</span>
           </div>
-          <div style={{fontSize:11,color:"#888",marginTop:8}}>📍 {t.deliveryTo}: {conversation.village}</div>
-          <div style={{marginTop:10,background:"#fff5f3",borderRadius:10,padding:"8px 10px",fontSize:11,color:"#e8401c",fontWeight:600}}>
-            📸 {t.proofRequest}
-          </div>
+          <div style={{fontSize:11,color:"#888",marginTop:6}}>📍 {t.deliveryTo}: {conversation.village}</div>
+          {/* Point 7: auto proof request shown immediately */}
+          {!confirmed && (
+            <div style={{marginTop:10,background:"#fff5f3",borderRadius:10,padding:"8px 10px",fontSize:11,color:"#e8401c",fontWeight:600}}>
+              📸 {t.proofRequest}
+            </div>
+          )}
+          {confirmed && (
+            <div style={{marginTop:10,background:"#f0fff4",borderRadius:10,padding:"8px 10px",fontSize:11,color:"#2d6a4f",fontWeight:600}}>
+              ✅ {lang==="lo"?"ຊຳລະແລ້ວ":lang==="en"?"Payment confirmed":"已付款"}
+            </div>
+          )}
         </div>
 
         {messages.map(m=>(
@@ -460,22 +579,45 @@ function ChatModal({ conversation, lang, onClose }) {
             {m.text && <div style={{fontSize:13}}>{m.text}</div>}
           </div>
         ))}
+
+        {/* Point 5: Rating widget after payment confirmed */}
+        {confirmed && !ratingDone && (
+          <div style={{alignSelf:"flex-start",background:"#fff",borderRadius:"4px 16px 16px 16px",padding:14,boxShadow:"0 2px 8px rgba(0,0,0,0.06)",maxWidth:"85%"}}>
+            <div style={{fontWeight:700,fontSize:13,marginBottom:8}}>
+              {lang==="lo"?"ໃຫ້ຄະແນນສິນຄ້ານີ້":lang==="en"?"Rate your purchase":"给这次购物评分"}
+            </div>
+            <div style={{display:"flex",gap:8}}>
+              {[1,2,3,4,5].map(s=>(
+                <button key={s} onClick={()=>submitRating(s)} style={{
+                  fontSize:28,background:"none",border:"none",cursor:"pointer",
+                  opacity: s<=rating ? 1 : 0.3, transition:"opacity .15s"
+                }}>⭐</button>
+              ))}
+            </div>
+          </div>
+        )}
+        {ratingDone && (
+          <div style={{alignSelf:"flex-start",background:"#f0fff4",borderRadius:"4px 16px 16px 16px",padding:12,fontSize:12,color:"#2d6a4f",fontWeight:600}}>
+            {"⭐".repeat(rating)} {lang==="lo"?"ຂອບໃຈສຳລັບຄະແນນ!":lang==="en"?"Thanks for your rating!":"感谢您的评分！"}
+          </div>
+        )}
       </div>
 
       <div style={{padding:12,background:"#fff",borderTop:"1px solid #f0f0f0",display:"flex",gap:8,alignItems:"center"}}>
-        <label style={{ width:38,height:38,borderRadius:12,background:"#fff5f3",display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",flexShrink:0 }}>
+        <label style={{ width:38,height:38,borderRadius:12,background:"#fff5f3",border:"1.5px solid #ffd0d0",display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",flexShrink:0,fontSize:18 }}>
           📷
           <input type="file" accept="image/*" onChange={handlePhotoUpload} style={{display:"none"}}/>
         </label>
         <input value={text} onChange={e=>setText(e.target.value)} onKeyDown={e=>e.key==="Enter"&&handleSend()}
-          placeholder={t.typeMessage} style={{flex:1,padding:"10px 14px",borderRadius:20,border:"1.5px solid #eee",fontSize:13,outline:"none"}}/>
+          placeholder={confirmed ? (lang==="lo"?"ຂຽນຂໍ້ຄວາມ...":lang==="en"?"Write a message...":"写消息...") : t.typeMessage}
+          style={{flex:1,padding:"10px 14px",borderRadius:20,border:"1.5px solid #eee",fontSize:13,outline:"none"}}/>
         <button onClick={handleSend} style={{ width:38,height:38,borderRadius:"50%",background:"linear-gradient(90deg,#ff6b35,#e8401c)",color:"#fff",border:"none",cursor:"pointer",fontSize:16,flexShrink:0 }}>➤</button>
       </div>
     </div>
   );
 }
 
-function DetailModal({ p, lang, onClose, onAdd }) {
+function DetailModal({ p, lang, onClose, onAdd, onViewShop }) {
   const t = L[lang];
   const name = p[`name_${lang}`] || p.name_en || p.name_lo;
   const [shipper, setShipper] = useState("");
@@ -512,7 +654,7 @@ function DetailModal({ p, lang, onClose, onAdd }) {
           </div>
         )}
         <div style={{fontWeight:800,fontSize:20,marginBottom:4}}>{name}</div>
-        <div style={{fontSize:13,color:"#888",marginBottom:8}}>🏪 {p.seller_name||"—"}</div>
+        <div onClick={()=>p.seller_id&&onViewShop&&onViewShop(p)} style={{fontSize:13,color:"#e8401c",marginBottom:8,cursor:p.seller_id?"pointer":"default",fontWeight:600}}>🏪 {p.seller_name||"—"} {p.seller_id?"→":""}</div>
         {p.description && <div style={{fontSize:13,color:"#555",marginBottom:12,lineHeight:1.5}}>{p.description}</div>}
         {p.rating && <div style={{color:"#f5a623",fontSize:14,marginBottom:12}}>{"★".repeat(Math.floor(p.rating))} {p.rating} · {p.sold} {t.sold}</div>}
         <div style={{fontWeight:800,color:"#e8401c",fontSize:28,marginBottom:16}}>{fmt(p.price)}</div>
@@ -722,21 +864,45 @@ function SellerDashboard({ seller, lang, onClose }) {
   const [showAdd, setShowAdd] = useState(false);
   const [loading, setLoading] = useState(true);
   const [translating, setTranslating] = useState(false);
+  const [stats, setStats] = useState({ revenue: 0, sold: 0 });
+  const [qrImage, setQrImage] = useState(seller.qr_image || "");
+  const [shipperPrefs, setShipperPrefs] = useState(
+    Array.isArray(seller.shippers) ? seller.shippers : seller.shipper ? [seller.shipper] : ["Anousith"]
+  );
   const [form, setForm] = useState({ name_input:"", name_lo:"", name_en:"", name_zh:"", price:"", category:"fashion", emoji:"📦", images:[], description:"", badge:"" });
   const setF = (k,v) => setForm(f=>({...f,[k]:v}));
+
+  const toggleShipper = (s) => setShipperPrefs(prev =>
+    prev.includes(s) ? prev.filter(x=>x!==s) : [...prev, s]
+  );
 
   const handleImagesUpload = (e) => {
     const files = Array.from(e.target.files || []);
     if (!files.length) return;
     const remaining = 6 - form.images.length;
-    const toAdd = files.slice(0, remaining);
-    toAdd.forEach(file => {
+    files.slice(0, remaining).forEach(file => {
       const reader = new FileReader();
       reader.onload = (ev) => setForm(f => f.images.length < 6 ? { ...f, images: [...f.images, ev.target.result] } : f);
       reader.readAsDataURL(file);
     });
   };
   const removeImage = (idx) => setForm(f => ({ ...f, images: f.images.filter((_,i)=>i!==idx) }));
+
+  const handleQrUpload = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      setQrImage(ev.target.result);
+      sbFetch(`sellers?id=eq.${seller.id}`, { method:"PATCH", prefer:"return=minimal", body: JSON.stringify({ qr_image: ev.target.result }) }).catch(()=>{});
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const deleteQr = async () => {
+    setQrImage("");
+    try { await sbFetch(`sellers?id=eq.${seller.id}`, { method:"PATCH", prefer:"return=minimal", body: JSON.stringify({ qr_image: "" }) }); } catch {}
+  };
 
   useEffect(() => {
     const load = async () => {
@@ -745,6 +911,15 @@ function SellerDashboard({ seller, lang, onClose }) {
         const data = await sbFetch(`products?seller_id=eq.${seller.id}&order=created_at.desc`);
         setProducts(data || []);
       } catch { setProducts([]); }
+      // Load stats from confirmed conversations
+      try {
+        const convs = await sbFetch(`conversations?seller_id=eq.${seller.id}&payment_confirmed=eq.true`);
+        if (convs && convs.length > 0) {
+          const revenue = convs.reduce((s,c)=>s+(c.total||0), 0);
+          const sold = convs.reduce((s,c)=>s+((c.items||[]).reduce((a,i)=>a+(i.qty||1),0)), 0);
+          setStats({ revenue, sold });
+        }
+      } catch {}
       setLoading(false);
     };
     load();
@@ -768,7 +943,6 @@ function SellerDashboard({ seller, lang, onClose }) {
       const data = await sbFetch("products", { method:"POST", body: JSON.stringify(payload) });
       setProducts(p => [data[0], ...p]);
     } catch {
-      // Demo mode
       setProducts(p => [{ ...payload, id:"demo-"+Date.now() }, ...p]);
     }
     setForm({ name_input:"", name_lo:"", name_en:"", name_zh:"", price:"", category:"fashion", emoji:"📦", images:[], description:"", badge:"" });
@@ -787,7 +961,7 @@ function SellerDashboard({ seller, lang, onClose }) {
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
           <div>
             <div style={{fontWeight:900,fontSize:17}}>🏪 {seller.name}</div>
-            <div style={{fontSize:11,opacity:.8}}>📞 {seller.phone} · 📦 {seller.shipper}</div>
+            <div style={{fontSize:11,opacity:.8}}>📦 {shipperPrefs.join(" · ")}</div>
           </div>
           <button onClick={onClose} style={{background:"rgba(255,255,255,0.2)",border:"none",color:"#fff",borderRadius:10,padding:"8px 14px",cursor:"pointer",fontWeight:700}}>← {t.home}</button>
         </div>
@@ -798,30 +972,49 @@ function SellerDashboard({ seller, lang, onClose }) {
         <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:10,marginBottom:16}}>
           {[
             { icon:"📦", label:t.products, value:products.length },
-            { icon:"💰", label:"Revenue", value:"—" },
-            { icon:"⭐", label:"Rating", value:"5.0" },
+            { icon:"💰", label:lang==="lo"?"ລາຍຮັບ":lang==="en"?"Revenue":"收入", value:fmt(stats.revenue) },
+            { icon:"🛍️", label:lang==="lo"?"ຂາຍແລ້ວ":lang==="en"?"Items sold":"已售", value:stats.sold },
           ].map((s,i)=>(
             <div key={i} style={{background:"#fff",borderRadius:14,padding:"14px 12px",textAlign:"center",boxShadow:"0 2px 8px rgba(0,0,0,0.06)"}}>
               <div style={{fontSize:24}}>{s.icon}</div>
-              <div style={{fontWeight:800,fontSize:20,color:"#1a1a1a"}}>{s.value}</div>
-              <div style={{fontSize:11,color:"#888"}}>{s.label}</div>
+              <div style={{fontWeight:800,fontSize:18,color:"#1a1a1a"}}>{s.value}</div>
+              <div style={{fontSize:10,color:"#888"}}>{s.label}</div>
             </div>
           ))}
         </div>
 
-        {/* QR Info */}
-        {(seller.qr_label || seller.qr_image) && (
-          <div style={{background:"#fff",borderRadius:14,padding:16,marginBottom:16,boxShadow:"0 2px 8px rgba(0,0,0,0.06)",display:"flex",alignItems:"center",gap:16}}>
-            {seller.qr_image
-              ? <img src={seller.qr_image} alt="QR" style={{width:70,height:70,objectFit:"contain",borderRadius:10,border:"1px solid #f0f0f0"}}/>
-              : <div style={{width:60,height:60,background:"linear-gradient(135deg,#1a1a2e,#16213e)",borderRadius:12,display:"flex",alignItems:"center",justifyContent:"center",fontSize:28}}>📲</div>
-            }
-            <div>
-              <div style={{fontWeight:700,fontSize:14}}>{seller.qr_label||"QR Payment"}</div>
-              <div style={{fontSize:12,color:"#888"}}>QR ໂອນເງິນ · {seller.village||"Vientiane"}</div>
-            </div>
+        {/* Shipper preferences */}
+        <div style={{background:"#fff",borderRadius:14,padding:16,marginBottom:16,boxShadow:"0 2px 8px rgba(0,0,0,0.06)"}}>
+          <div style={{fontWeight:700,fontSize:13,marginBottom:10}}>📦 {lang==="lo"?"ຜູ້ຂົນສົ່ງທີ່ຮັບ":lang==="en"?"Accepted shippers":"支持快递"}</div>
+          <div style={{display:"flex",gap:8}}>
+            {SHIPPERS.map(s=>(
+              <button key={s} onClick={()=>toggleShipper(s)} style={{ flex:1,padding:"8px 4px",borderRadius:10,fontSize:11,cursor:"pointer",fontWeight:600, border:shipperPrefs.includes(s)?"2px solid #e8401c":"1.5px solid #e0e0e0", background:shipperPrefs.includes(s)?"#fff5f3":"#fff", color:shipperPrefs.includes(s)?"#e8401c":"#555" }}>
+                {shipperPrefs.includes(s)?"✓ ":""}{s}
+              </button>
+            ))}
           </div>
-        )}
+        </div>
+
+        {/* QR Payment */}
+        <div style={{background:"#fff",borderRadius:14,padding:16,marginBottom:16,boxShadow:"0 2px 8px rgba(0,0,0,0.06)"}}>
+          <div style={{fontWeight:700,fontSize:13,marginBottom:10}}>📲 QR {lang==="lo"?"ຊຳລະເງິນ":lang==="en"?"Payment":"收款"}</div>
+          {qrImage
+            ? <div style={{display:"flex",alignItems:"center",gap:14}}>
+                <img src={qrImage} alt="QR" style={{width:80,height:80,objectFit:"contain",borderRadius:10,border:"1px solid #f0f0f0"}}/>
+                <div>
+                  <div style={{fontWeight:600,fontSize:13,marginBottom:6}}>{seller.qr_label||"QR Payment"}</div>
+                  <button onClick={deleteQr} style={{background:"none",border:"1.5px solid #ffd0d0",color:"#e8401c",borderRadius:8,padding:"5px 12px",cursor:"pointer",fontSize:11,fontWeight:600}}>
+                    🗑️ {lang==="lo"?"ລຶບ QR":lang==="en"?"Delete QR":"删除"}
+                  </button>
+                </div>
+              </div>
+            : <label style={{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",border:"2px dashed #e8e8e8",borderRadius:12,padding:"16px 0",cursor:"pointer",gap:6}}>
+                <span style={{fontSize:28}}>📷</span>
+                <span style={{fontSize:12,color:"#aaa"}}>{lang==="lo"?"ອັບໂຫຼດ QR ໃໝ່":lang==="en"?"Upload new QR":"上传新QR"}</span>
+                <input type="file" accept="image/*" onChange={handleQrUpload} style={{display:"none"}}/>
+              </label>
+          }
+        </div>
 
         {/* Add Product */}
         <button onClick={()=>setShowAdd(s=>!s)} style={{...btn("linear-gradient(90deg,#ff6b35,#e8401c)",undefined,{marginBottom:16})}}>
@@ -997,6 +1190,7 @@ export default function App() {
   const [activeChat, setActiveChat] = useState(null);
   const [showInbox, setShowInbox]   = useState(false);
   const [myPhone, setMyPhone]       = useState("");
+  const [viewShop, setViewShop]     = useState(null); // { seller_id, seller_name }
 
   const t = L[lang];
 
@@ -1131,11 +1325,12 @@ export default function App() {
       </div>
 
       {showCart&&<CartDrawer cart={cart} lang={lang} onClose={()=>setShowCart(false)} onQty={updateQty} onOpenChat={(conv)=>{setActiveChat(conv);setShowCart(false);}}/>}
-      {detail&&<DetailModal p={detail} lang={lang} onClose={()=>setDetail(null)} onAdd={addToCart}/>}
+      {detail&&<DetailModal p={detail} lang={lang} onClose={()=>setDetail(null)} onAdd={addToCart} onViewShop={(p)=>{setViewShop({seller_id:p.seller_id,seller_name:p.seller_name});setDetail(null);}}/>}
       {showSellerReg&&<SellerRegModal lang={lang} onClose={()=>setShowSellerReg(false)} onSuccess={seller=>{setCurrentSeller(seller);setShowSellerReg(false);setActiveTab("sell");}}/>}
       {showSellerLogin&&<SellerLoginModal lang={lang} onClose={()=>setShowSellerLogin(false)} onSuccess={seller=>{setCurrentSeller(seller);setShowSellerLogin(false);setActiveTab("sell");}} onGoRegister={()=>{setShowSellerLogin(false);setShowSellerReg(true);}}/>}
       {showInbox&&<MessagesInbox lang={lang} onClose={()=>setShowInbox(false)} onOpenChat={(conv)=>{setActiveChat(conv);setShowInbox(false);}}/>}
       {activeChat&&<ChatModal conversation={activeChat} lang={lang} onClose={()=>setActiveChat(null)}/>}
+      {viewShop&&<SellerShopModal sellerId={viewShop.seller_id} sellerName={viewShop.seller_name} lang={lang} onClose={()=>setViewShop(null)} onAdd={addToCart}/>}
     </div>
   );
 }
