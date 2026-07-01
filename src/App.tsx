@@ -1249,7 +1249,21 @@ export default function App() {
     const load = async () => {
       try {
         const data = await sbFetch("products?order=created_at.desc&limit=50");
-        if (data && data.length > 0) setDbProducts(data);
+        if (data && data.length > 0) {
+          // Fetch seller QR codes and attach to products
+          const sellerIds = [...new Set(data.filter(p=>p.seller_id).map(p=>p.seller_id))];
+          let sellersMap = {};
+          if (sellerIds.length > 0) {
+            const sellers = await sbFetch(`sellers?id=in.(${sellerIds.join(",")})`);
+            if (sellers) sellers.forEach(s => { sellersMap[s.id] = s; });
+          }
+          const enriched = data.map(p => ({
+            ...p,
+            qr_image: sellersMap[p.seller_id]?.qr_image || "",
+            seller_shippers: sellersMap[p.seller_id]?.shippers || (sellersMap[p.seller_id]?.shipper ? [sellersMap[p.seller_id].shipper] : []),
+          }));
+          setDbProducts(enriched);
+        }
       } catch {}
     };
     load();
