@@ -178,9 +178,12 @@ const SHIPPERS = ["Anousith", "HAL Express", "Mixay Express"];
 const DEMO_PRODUCTS = [];
 
 const L = {
-  lo: { search:"ຄົ້ນຫາສິນຄ້າ...", cart:"ກະຕ່າ", buy:"ຊື້ດຽວນີ້", msg:"ສົ່ງຂໍ້ຄວາມ", sold:"ຂາຍແລ້ວ", shipper:"ເລືອກຂົນສົ່ງ", add:"ເພີ່ມໃສ່ກະຕ່າ", total:"ລວມ", checkout:"ຊຳລະ", empty:"ກະຕ່າຫວ່າງ", close:"ປິດ", pay:"ວິທີຊຳລະ", qr:"ສະແກນ QR ຊຳລະ", home:"ໜ້າຫຼັກ", sell:"ຂາຍ", dashboard:"ຈັດການ", save:"ບັນທຶກ", cancel:"ຍົກເລີກ", products:"ສິນຄ້າ", addProduct:"ເພີ່ມສິນຄ້າ", sellerReg:"ລົງທະບຽນຂາຍ", storeName:"ຊື່ຮ້ານ", phone:"ເບີໂທ", whatsapp:"WhatsApp", village:"ບ້ານ / ສາຂາ", mainCategory:"ໝວດຫຼັກ", qrLabel:"ຊື່ QR ໂອນເງິນ", price:"ລາຄາ (₭)", emoji:"Icon", productName:"ຊື່ສິນຄ້າ", desc:"ລາຍລະອຽດ", register:"ລົງທະບຽນ", myShop:"ຮ້ານຂອງຂ້ອຍ", orders:"ຄຳສັ່ງ", loading:"ກຳລັງໂຫຼດ...", login:"ເຂົ້າສູ່ລະບົບ", logout:"ອອກຈາກລະບົບ", password:"ລະຫັດຜ່ານ", loginTitle:"ເຂົ້າສູ່ລະບົບຮ້ານຄ້າ", noAccount:"ຍັງບໍ່ມີຮ້ານ?", createAccount:"ລົງທະບຽນຮ້ານໃໝ່", wrongLogin:"ເບີໂທ ຫຼື ລະຫັດຜ່ານບໍ່ຖືກຕ້ອງ", productPhoto:"ຮູບສິນຄ້າ", uploadPhoto:"ກົດເພື່ອອັບໂຫຼດຮູບ", translating:"ກຳລັງແປ...", nameOneOnly:"ຂຽນຊື່ສິນຄ້າພາສາໃດກໍໄດ້ ລະບົບຈະແປໃຫ້ອັດຕະໂນມັດ", messages:"ຂໍ້ຄວາມ", welcomeMsg:"ຍິນດີຕ້ອນຮັບ! ຂອບໃຈສຳລັບການສັ່ງຊື້", orderSummary:"ສະຫຼຸບຄຳສັ່ງຊື້", deliveryTo:"ສົ່ງໄປທີ່", proofRequest:"ກະລຸນາສົ່ງຫຼັກຖານການໂອນເງິນ (ຮູບພາບ) ມາທີ່ນີ້", typeMessage:"ພິມຂໍ້ຄວາມ...", sendProof:"ສົ່ງຫຼັກຖານ", noConversations:"ຍັງບໍ່ມີຂໍ້ຄວາມ", yourBuyerName:"ຊື່ຂອງທ່ານ", yourBuyerPhone:"ເບີໂທຂອງທ່ານ", startChat:"ເລີ່ມສົນທະນາ" },
-  en: { search:"Search products...", cart:"Cart", buy:"Buy Now", msg:"Message", sold:"sold", shipper:"Choose Shipper", add:"Add to Cart", total:"Total", checkout:"Checkout", empty:"Cart is empty", close:"Close", pay:"Payment", qr:"Scan QR to Pay", home:"Home", sell:"Sell", dashboard:"Manage", save:"Save", cancel:"Cancel", products:"Products", addProduct:"Add Product", sellerReg:"Become a Seller", storeName:"Store Name", phone:"Phone", whatsapp:"WhatsApp", village:"Village / Branch", mainCategory:"Main Category", qrLabel:"QR Payment Name", price:"Price (₭)", emoji:"Icon", productName:"Product Name", desc:"Description", register:"Register", myShop:"My Shop", orders:"Orders", loading:"Loading...", login:"Login", logout:"Logout", password:"Password", loginTitle:"Seller Login", noAccount:"No shop yet?", createAccount:"Register a new shop", wrongLogin:"Wrong phone or password", productPhoto:"Product Photo", uploadPhoto:"Tap to upload photo", translating:"Translating...", nameOneOnly:"Write the product name in any language — we'll auto-translate it", messages:"Messages", welcomeMsg:"Welcome! Thanks for your order", orderSummary:"Order Summary", deliveryTo:"Deliver to", proofRequest:"Please send your payment proof (photo) here", typeMessage:"Type a message...", sendProof:"Send proof", noConversations:"No conversations yet", yourBuyerName:"Your name", yourBuyerPhone:"Your phone", startChat:"Start conversation" },
-  zh: { search:"搜索商品...", cart:"购物车", buy:"立即购买", msg:"发消息", sold:"已售", shipper:"选择快递", add:"加入购物车", total:"合计", checkout:"结算", empty:"购物车为空", close:"关闭", pay:"付款方式", qr:"扫码支付", home:"首页", sell:"卖货", dashboard:"管理", save:"保存", cancel:"取消", products:"商品", addProduct:"添加商品", sellerReg:"成为卖家", storeName:"店铺名称", phone:"电话", whatsapp:"WhatsApp", village:"村/分支", mainCategory:"主要类别", qrLabel:"QR收款名称", price:"价格 (₭)", emoji:"图标", productName:"商品名称", desc:"描述", register:"注册", myShop:"我的店", orders:"订单", loading:"加载中...", login:"登录", logout:"退出登录", password:"密码", loginTitle:"卖家登录", noAccount:"还没有店铺？", createAccount:"注册新店铺", wrongLogin:"电话或密码错误", productPhoto:"商品照片", uploadPhoto:"点击上传照片", translating:"翻译中...", nameOneOnly:"用任意语言输入商品名称，系统会自动翻译", messages:"消息", welcomeMsg:"欢迎！感谢您的订单", orderSummary:"订单摘要", deliveryTo:"送货至", proofRequest:"请在此发送付款凭证（照片）", typeMessage:"输入消息...", sendProof:"发送凭证", noConversations:"暂无对话", yourBuyerName:"您的姓名", yourBuyerPhone:"您的电话", startChat:"开始对话" },
+  lo: { search:"ຄົ້ນຫາສິນຄ້າ...", cart:"ກະຕ່າ", buy:"ຊື້ດຽວນີ້", msg:"ສົ່ງຂໍ້ຄວາມ", sold:"ຂາຍແລ້ວ", shipper:"ເລືອກຂົນສົ່ງ", add:"ເພີ່ມໃສ່ກະຕ່າ", total:"ລວມ", checkout:"ຊຳລະ", empty:"ກະຕ່າຫວ່າງ", close:"ປິດ", pay:"ວິທີຊຳລະ", qr:"ສະແກນ QR ຊຳລະ", home:"ໜ້າຫຼັກ", sell:"ຂາຍ", dashboard:"ຈັດການ", save:"ບັນທຶກ", cancel:"ຍົກເລີກ", products:"ສິນຄ້າ", addProduct:"ເພີ່ມສິນຄ້າ", sellerReg:"ລົງທະບຽນຂາຍ", storeName:"ຊື່ຮ້ານ", phone:"ເບີໂທ", whatsapp:"WhatsApp", village:"ບ້ານ / ສາຂາ", mainCategory:"ໝວດຫຼັກ", qrLabel:"ຊື່ QR ໂອນເງິນ", price:"ລາຄາ (₭)", emoji:"Icon", productName:"ຊື່ສິນຄ້າ", desc:"ລາຍລະອຽດ", register:"ລົງທະບຽນ", myShop:"ຮ້ານຂອງຂ້ອຍ", orders:"ຄຳສັ່ງ", loading:"ກຳລັງໂຫຼດ...", login:"ເຂົ້າສູ່ລະບົບ", logout:"ອອກຈາກລະບົບ", password:"ລະຫັດຜ່ານ", loginTitle:"ເຂົ້າສູ່ລະບົບຮ້ານຄ້າ", noAccount:"ຍັງບໍ່ມີຮ້ານ?", createAccount:"ລົງທະບຽນຮ້ານໃໝ່", wrongLogin:"ເບີໂທ ຫຼື ລະຫັດຜ່ານບໍ່ຖືກຕ້ອງ", productPhoto:"ຮູບສິນຄ້າ", uploadPhoto:"ກົດເພື່ອອັບໂຫຼດຮູບ", translating:"ກຳລັງແປ...", nameOneOnly:"ຂຽນຊື່ສິນຄ້າພາສາໃດກໍໄດ້ ລະບົບຈະແປໃຫ້ອັດຕະໂນມັດ", messages:"ຂໍ້ຄວາມ", welcomeMsg:"ຍິນດີຕ້ອນຮັບ! ຂອບໃຈສຳລັບການສັ່ງຊື້", orderSummary:"ສະຫຼຸບຄຳສັ່ງຊື້", deliveryTo:"ສົ່ງໄປທີ່", proofRequest:"ກະລຸນາສົ່ງຫຼັກຖານການໂອນເງິນ (ຮູບພາບ) ມາທີ່ນີ້", typeMessage:"ພິມຂໍ້ຄວາມ...", sendProof:"ສົ່ງຫຼັກຖານ", noConversations:"ຍັງບໍ່ມີຂໍ້ຄວາມ", yourBuyerName:"ຊື່ຂອງທ່ານ", yourBuyerPhone:"ເບີໂທຂອງທ່ານ", startChat:"ເລີ່ມສົນທະນາ",
+    filterPrice:"ກັ່ນຕອງລາຄາ", minPrice:"ລາຄາຕ່ຳສຸດ", maxPrice:"ລາຄາສູງສຸດ", sortBy:"ຈັດລຽງ", newest:"ໃໝ່ສຸດ", priceAsc:"ລາຄາຕ່ຳ→ສູງ", priceDesc:"ລາຄາສູງ→ຕ່ຳ", topRated:"ຄະແນນສູງ", similar:"ສິນຄ້າໃກ້ຄຽງ", newArrivals:"ສິນຄ້າໃໝ່", report:"ລາຍງານ", reportSent:"ສົ່ງລາຍງານແລ້ວ", verified:"ຮ້ານຢັ້ງຢືນ", sponsored:"ສະໜອງທຶນ", promoPrice:"ລາຄາໂປຣ", oldPrice:"ລາຄາເກົ່າ", orderHistory:"ປະຫວັດຄຳສັ່ງ", referral:"ລະຫັດສົ່ງຕໍ່", copyCode:"ຄັດລອກ", apply:"ນຳໃຊ້" },
+  en: { search:"Search products...", cart:"Cart", buy:"Buy Now", msg:"Message", sold:"sold", shipper:"Choose Shipper", add:"Add to Cart", total:"Total", checkout:"Checkout", empty:"Cart is empty", close:"Close", pay:"Payment", qr:"Scan QR to Pay", home:"Home", sell:"Sell", dashboard:"Manage", save:"Save", cancel:"Cancel", products:"Products", addProduct:"Add Product", sellerReg:"Become a Seller", storeName:"Store Name", phone:"Phone", whatsapp:"WhatsApp", village:"Village / Branch", mainCategory:"Main Category", qrLabel:"QR Payment Name", price:"Price (₭)", emoji:"Icon", productName:"Product Name", desc:"Description", register:"Register", myShop:"My Shop", orders:"Orders", loading:"Loading...", login:"Login", logout:"Logout", password:"Password", loginTitle:"Seller Login", noAccount:"No shop yet?", createAccount:"Register a new shop", wrongLogin:"Wrong phone or password", productPhoto:"Product Photo", uploadPhoto:"Tap to upload photo", translating:"Translating...", nameOneOnly:"Write the product name in any language — we'll auto-translate it", messages:"Messages", welcomeMsg:"Welcome! Thanks for your order", orderSummary:"Order Summary", deliveryTo:"Deliver to", proofRequest:"Please send your payment proof (photo) here", typeMessage:"Type a message...", sendProof:"Send proof", noConversations:"No conversations yet", yourBuyerName:"Your name", yourBuyerPhone:"Your phone", startChat:"Start conversation",
+    filterPrice:"Filter by price", minPrice:"Min price", maxPrice:"Max price", sortBy:"Sort by", newest:"Newest", priceAsc:"Price: Low→High", priceDesc:"Price: High→Low", topRated:"Top rated", similar:"Similar products", newArrivals:"New Arrivals", report:"Report", reportSent:"Report sent", verified:"Verified shop", sponsored:"Sponsored", promoPrice:"Promo price", oldPrice:"Original price", orderHistory:"Order history", referral:"Referral code", copyCode:"Copy", apply:"Apply" },
+  zh: { search:"搜索商品...", cart:"购物车", buy:"立即购买", msg:"发消息", sold:"已售", shipper:"选择快递", add:"加入购物车", total:"合计", checkout:"结算", empty:"购物车为空", close:"关闭", pay:"付款方式", qr:"扫码支付", home:"首页", sell:"卖货", dashboard:"管理", save:"保存", cancel:"取消", products:"商品", addProduct:"添加商品", sellerReg:"成为卖家", storeName:"店铺名称", phone:"电话", whatsapp:"WhatsApp", village:"村/分支", mainCategory:"主要类别", qrLabel:"QR收款名称", price:"价格 (₭)", emoji:"图标", productName:"商品名称", desc:"描述", register:"注册", myShop:"我的店", orders:"订单", loading:"加载中...", login:"登录", logout:"退出登录", password:"密码", loginTitle:"卖家登录", noAccount:"还没有店铺？", createAccount:"注册新店铺", wrongLogin:"电话或密码错误", productPhoto:"商品照片", uploadPhoto:"点击上传照片", translating:"翻译中...", nameOneOnly:"用任意语言输入商品名称，系统会自动翻译", messages:"消息", welcomeMsg:"欢迎！感谢您的订单", orderSummary:"订单摘要", deliveryTo:"送货至", proofRequest:"请在此发送付款凭证（照片）", typeMessage:"输入消息...", sendProof:"发送凭证", noConversations:"暂无对话", yourBuyerName:"您的姓名", yourBuyerPhone:"您的电话", startChat:"开始对话",
+    filterPrice:"价格筛选", minPrice:"最低价", maxPrice:"最高价", sortBy:"排序", newest:"最新", priceAsc:"价格低→高", priceDesc:"价格高→低", topRated:"好评优先", similar:"相似商品", newArrivals:"新品", report:"举报", reportSent:"已举报", verified:"认证店铺", sponsored:"推广", promoPrice:"促销价", oldPrice:"原价", orderHistory:"订单历史", referral:"推荐码", copyCode:"复制", apply:"应用" },
 };
 
 const fmt = (n) => n >= 1000000 ? (n/1000000).toFixed(1)+"M ₭" : n >= 1000 ? (n/1000).toFixed(0)+"K ₭" : n+" ₭";
@@ -201,13 +204,17 @@ const label = { fontSize:11, color:"#888", marginBottom:4, display:"block", font
 function ProductCard({ p, lang, onAdd, onDetail }) {
   const t = L[lang];
   const name = p[`name_${lang}`] || p.name_en || p.name_lo;
+  const isOutOfStock = p.stock != null && p.stock <= 0;
   return (
-    <div onClick={() => onDetail(p)} style={{
+    <div onClick={() => !isOutOfStock && onDetail(p)} style={{
       background:"#fff", borderRadius:16, overflow:"hidden",
-      boxShadow:"0 2px 12px rgba(0,0,0,0.07)", cursor:"pointer",
-      transition:"transform .15s", display:"flex", flexDirection:"column"
+      boxShadow: p.sponsored ? "0 4px 20px rgba(232,64,28,0.2)" : "0 2px 12px rgba(0,0,0,0.07)",
+      cursor: isOutOfStock ? "not-allowed" : "pointer",
+      transition:"transform .15s", display:"flex", flexDirection:"column",
+      border: p.sponsored ? "1.5px solid #ff6b35" : "none",
+      opacity: isOutOfStock ? 0.7 : 1
     }}
-    onMouseEnter={e=>e.currentTarget.style.transform="translateY(-3px)"}
+    onMouseEnter={e=>{ if(!isOutOfStock) e.currentTarget.style.transform="translateY(-3px)"; }}
     onMouseLeave={e=>e.currentTarget.style.transform="translateY(0)"}
     >
       <div style={{ background:"linear-gradient(135deg,#fff8f0,#fff0f8)", fontSize:52, textAlign:"center", position:"relative", overflow:"hidden", aspectRatio:"1/1", display:"flex", alignItems:"center", justifyContent:"center" }}>
@@ -216,25 +223,33 @@ function ProductCard({ p, lang, onAdd, onDetail }) {
           : (p.emoji || "📦")
         }
         {p.badge && <span style={{ position:"absolute", top:8, right:8, background:"#ff4d4d", color:"#fff", borderRadius:20, fontSize:10, padding:"2px 7px", fontWeight:700 }}>{p.badge}</span>}
+        {p.sponsored && <span style={{ position:"absolute", top:8, left:8, background:"#ff6b35", color:"#fff", borderRadius:20, fontSize:9, padding:"2px 6px", fontWeight:700 }}>⭐ {t.sponsored}</span>}
+        {isOutOfStock && <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.4)",display:"flex",alignItems:"center",justifyContent:"center"}}><span style={{background:"#fff",borderRadius:8,padding:"4px 10px",fontSize:11,fontWeight:700,color:"#e8401c"}}>❌ {lang==="lo"?"ໝົດ":lang==="en"?"Sold out":"售完"}</span></div>}
       </div>
       <div style={{ padding:"12px 14px", flex:1, display:"flex", flexDirection:"column", gap:3 }}>
         <div style={{ fontSize:13, fontWeight:600, color:"#1a1a1a", lineHeight:1.3 }}>{name}</div>
-        <div style={{ fontSize:11, color:"#999" }}>🏪 {p.seller_name || "—"}</div>
-        {p.rating && <div style={{ fontSize:11, color:"#f5a623" }}>{"★".repeat(Math.floor(p.rating))} <span style={{color:"#bbb"}}>{p.sold} {t.sold}</span></div>}
-        <div style={{ fontWeight:800, color:"#e8401c", fontSize:15, marginTop:4 }}>{fmt(p.price)}</div>
-        <button onClick={e=>{e.stopPropagation();onAdd(p);}} style={{ ...btn("linear-gradient(90deg,#ff6b35,#e8401c)"), marginTop:8, padding:"8px 0", fontSize:12 }}>{t.add}</button>
+        <div style={{ fontSize:11, color:"#999", display:"flex", alignItems:"center", gap:4 }}>
+          🏪 {p.seller_name || "—"}
+          {p.seller_verified && <span style={{background:"#e8f5e9",color:"#2d6a4f",borderRadius:4,fontSize:9,padding:"1px 4px",fontWeight:700}}>✅</span>}
+        </div>
+        {p.rating > 0 && <div style={{ fontSize:11, color:"#f5a623" }}>{"★".repeat(Math.floor(p.rating||0))} <span style={{color:"#bbb"}}>{p.sold||0} {t.sold}</span></div>}
+        <div style={{ display:"flex", alignItems:"center", gap:6, marginTop:4 }}>
+          <span style={{ fontWeight:800, color:"#e8401c", fontSize:15 }}>{fmt(p.promo_price || p.price)}</span>
+          {p.promo_price && p.promo_price < p.price && <span style={{fontSize:11,color:"#bbb",textDecoration:"line-through"}}>{fmt(p.price)}</span>}
+        </div>
+        {!isOutOfStock && <button onClick={e=>{e.stopPropagation();onAdd(p);}} style={{ ...btn("linear-gradient(90deg,#ff6b35,#e8401c)"), marginTop:8, padding:"8px 0", fontSize:12 }}>{t.add}</button>}
       </div>
     </div>
   );
 }
 
 // ─── CART DRAWER ─────────────────────────────────────────────────────────────
-function CartDrawer({ cart, lang, onClose, onQty, onOpenChat }) {
+function CartDrawer({ cart, lang, onClose, onQty, onOpenChat, onClearCart, buyerName:initName="", buyerPhone:initPhone="", buyerVillage:initVillage="", buyerShipper:initShipper="" }) {
   const t = L[lang];
-  const [shipper, setShipper] = useState("");
-  const [village, setVillage] = useState("");
-  const [buyerName, setBuyerName] = useState("");
-  const [buyerPhone, setBuyerPhone] = useState("");
+  const [shipper, setShipper] = useState(initShipper||"");
+  const [village, setVillage] = useState(initVillage||"");
+  const [buyerName, setBuyerName] = useState(initName||"");
+  const [buyerPhone, setBuyerPhone] = useState(initPhone||"");
   const [showQR, setShowQR] = useState(false);
   const [qrIndex, setQrIndex] = useState(0);
   const [creating, setCreating] = useState(false);
@@ -372,7 +387,9 @@ function CartDrawer({ cart, lang, onClose, onQty, onOpenChat }) {
       </div>
       {showQR && currentGroup && (
         <div style={{ position:"fixed",inset:0,zIndex:200,background:"rgba(0,0,0,0.6)",display:"flex",alignItems:"center",justifyContent:"center" }}>
-          <div style={{ background:"#fff",borderRadius:20,padding:32,textAlign:"center",maxWidth:300,width:"90%",boxShadow:"0 8px 40px rgba(0,0,0,0.2)" }}>
+          <div style={{ background:"#fff",borderRadius:20,padding:32,textAlign:"center",maxWidth:300,width:"90%",boxShadow:"0 8px 40px rgba(0,0,0,0.2)",position:"relative" }}>
+            {/* Close X button */}
+            <button onClick={()=>setShowQR(false)} style={{position:"absolute",top:12,right:12,background:"none",border:"none",fontSize:20,cursor:"pointer",color:"#aaa",lineHeight:1}}>×</button>
             {isMultiSeller && (
               <div style={{fontSize:11,color:"#aaa",fontWeight:700,marginBottom:8}}>{qrIndex+1} {txt.of} {sellerGroups.length}</div>
             )}
@@ -385,10 +402,9 @@ function CartDrawer({ cart, lang, onClose, onQty, onOpenChat }) {
             <div style={{fontWeight:800,color:"#e8401c",fontSize:24,marginBottom:4}}>{fmt(currentGroupTotal)}</div>
             {shipper && <div style={{fontSize:12,color:"#888"}}>📦 {shipper}{village?` · ${village}`:""}</div>}
             <div style={{marginTop:16,display:"flex",flexDirection:"column",gap:8}}>
-              <button onClick={()=>onOpenChat(conversations[qrIndex])} style={btn("#fff","#e8401c",{border:"1.5px solid #e8401c"})}>💬 {txt.viewChat}</button>
               {isMultiSeller && qrIndex < sellerGroups.length - 1
                 ? <button onClick={()=>setQrIndex(i=>i+1)} style={btn("linear-gradient(90deg,#ff6b35,#e8401c)")}>{txt.next} →</button>
-                : <button onClick={()=>{setShowQR(false);onClose();}} style={btn()}>{txt.done} ✓</button>
+                : <button onClick={()=>{setShowQR(false);onOpenChat(conversations[qrIndex]);onClearCart();onClose();}} style={btn("linear-gradient(90deg,#ff6b35,#e8401c)")}>{txt.done} ✓</button>
               }
             </div>
           </div>
@@ -646,16 +662,19 @@ function ChatModal({ conversation, lang, onClose }) {
   );
 }
 
-function DetailModal({ p, lang, onClose, onAdd, onViewShop }) {
+function DetailModal({ p, lang, onClose, onAdd, onViewShop, allProducts=[] }) {
   const t = L[lang];
   const name = p[`name_${lang}`] || p.name_en || p.name_lo;
   const [shipper, setShipper] = useState("");
   const [imgIdx, setImgIdx] = useState(0);
+  const [showReport, setShowReport] = useState(false);
   const images = (p.images && p.images.length > 0) ? p.images : null;
+  const displayPrice = p.promo_price || p.price;
+  const similar = allProducts.filter(x => x.id !== p.id && x.category === p.category).slice(0, 4);
 
   return (
     <div style={{ position:"fixed",inset:0,zIndex:90,background:"rgba(0,0,0,0.5)",display:"flex",alignItems:"flex-end",justifyContent:"center" }} onClick={onClose}>
-      <div onClick={e=>e.stopPropagation()} style={{ background:"#fff",borderRadius:"24px 24px 0 0",padding:24,width:"100%",maxWidth:480,maxHeight:"85vh",overflowY:"auto" }}>
+      <div onClick={e=>e.stopPropagation()} style={{ background:"#fff",borderRadius:"24px 24px 0 0",padding:24,width:"100%",maxWidth:480,maxHeight:"90vh",overflowY:"auto" }}>
         <div style={{position:"relative",background:"linear-gradient(135deg,#fff8f0,#fff0f8)",borderRadius:16,marginBottom:16,overflow:"hidden",aspectRatio:"1/1",display:"flex",alignItems:"center",justifyContent:"center",fontSize:80}}>
           {images
             ? <img src={images[imgIdx]} alt="" style={{width:"100%",height:"100%",objectFit:"cover"}}/>
@@ -682,11 +701,31 @@ function DetailModal({ p, lang, onClose, onAdd, onViewShop }) {
             ))}
           </div>
         )}
-        <div style={{fontWeight:800,fontSize:20,marginBottom:4}}>{name}</div>
-        <div onClick={()=>p.seller_id&&onViewShop&&onViewShop(p)} style={{fontSize:13,color:"#e8401c",marginBottom:8,cursor:p.seller_id?"pointer":"default",fontWeight:600}}>🏪 {p.seller_name||"—"} {p.seller_id?"→":""}</div>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:4}}>
+          <div style={{fontWeight:800,fontSize:20,flex:1}}>{name}</div>
+          <button onClick={()=>setShowReport(true)} style={{background:"none",border:"none",cursor:"pointer",fontSize:18,color:"#ccc",padding:"0 0 0 8px"}}>🚩</button>
+        </div>
+        <div onClick={()=>p.seller_id&&onViewShop&&onViewShop(p)} style={{fontSize:13,color:"#e8401c",marginBottom:8,cursor:p.seller_id?"pointer":"default",fontWeight:600,display:"flex",alignItems:"center",gap:6}}>
+          🏪 {p.seller_name||"—"}
+          {p.seller_verified && <span style={{background:"#e8f5e9",color:"#2d6a4f",borderRadius:4,fontSize:10,padding:"1px 5px",fontWeight:700}}>✅ {t.verified}</span>}
+          {p.seller_id?"→":""}
+        </div>
         {p.description && <div style={{fontSize:13,color:"#555",marginBottom:12,lineHeight:1.5}}>{p.description}</div>}
-        {p.rating && <div style={{color:"#f5a623",fontSize:14,marginBottom:12}}>{"★".repeat(Math.floor(p.rating))} {p.rating} · {p.sold} {t.sold}</div>}
-        <div style={{fontWeight:800,color:"#e8401c",fontSize:28,marginBottom:16}}>{fmt(p.price)}</div>
+        {p.stock!=null && <div style={{fontSize:12,color:p.stock>0?"#2d6a4f":"#e8401c",fontWeight:600,marginBottom:8}}>
+          {p.stock>0?`✅ ${lang==="lo"?"ມີສິນຄ້າ":lang==="en"?"In stock":"有库存"}: ${p.stock}`:`❌ ${lang==="lo"?"ໝົດສິນຄ້າ":lang==="en"?"Out of stock":"缺货"}`}
+        </div>}
+        {p.rating > 0 && <div style={{color:"#f5a623",fontSize:14,marginBottom:12}}>{"★".repeat(Math.floor(p.rating||0))} {p.rating} · {p.sold||0} {t.sold}</div>}
+        <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:16}}>
+          <span style={{fontWeight:800,color:"#e8401c",fontSize:28}}>{fmt(displayPrice)}</span>
+          {p.promo_price && p.promo_price < p.price && (
+            <div style={{display:"flex",flexDirection:"column"}}>
+              <span style={{fontSize:13,color:"#bbb",textDecoration:"line-through"}}>{fmt(p.price)}</span>
+              <span style={{fontSize:11,background:"#ff4d4d",color:"#fff",borderRadius:6,padding:"1px 6px",fontWeight:700}}>
+                -{Math.round((1-p.promo_price/p.price)*100)}%
+              </span>
+            </div>
+          )}
+        </div>
         <div style={{marginBottom:16}}>
           <div style={{fontSize:12,color:"#888",marginBottom:8}}>{t.shipper}</div>
           <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
@@ -695,17 +734,141 @@ function DetailModal({ p, lang, onClose, onAdd, onViewShop }) {
             ))}
           </div>
         </div>
-        <div style={{display:"flex",gap:10}}>
-          <button onClick={()=>{onAdd(p);onClose();}} style={btn("linear-gradient(90deg,#ff6b35,#e8401c)",undefined,{flex:1})}>{t.buy}</button>
-          <button onClick={onClose} style={btn("#fff","#555",{flex:"0 0 auto",padding:"12px 18px",border:"1.5px solid #e0e0e0",width:"auto"})}>{t.msg} 💬</button>
+        <div style={{display:"flex",gap:10,marginBottom:20}}>
+          <button onClick={()=>{onAdd({...p,price:displayPrice});onClose();}} disabled={p.stock===0} style={btn(p.stock===0?"#ccc":"linear-gradient(90deg,#ff6b35,#e8401c)",undefined,{flex:1})}>{t.buy}</button>
         </div>
+
+        {/* Similar products */}
+        {similar.length > 0 && (
+          <div>
+            <div style={{fontWeight:700,fontSize:14,marginBottom:10}}>🔍 {t.similar}</div>
+            <div style={{display:"grid",gridTemplateColumns:"repeat(2,1fr)",gap:10}}>
+              {similar.map(sp=>{
+                const sname = sp[`name_${lang}`]||sp.name_en||sp.name_lo;
+                return (
+                  <div key={sp.id} onClick={()=>{ onClose(); setTimeout(()=>onAdd(sp),100); }} style={{background:"#fafafa",borderRadius:12,overflow:"hidden",cursor:"pointer"}}>
+                    <div style={{aspectRatio:"1/1",background:"#f0f0f0",display:"flex",alignItems:"center",justifyContent:"center",fontSize:30,overflow:"hidden"}}>
+                      {sp.images&&sp.images[0]?<img src={sp.images[0]} alt="" style={{width:"100%",height:"100%",objectFit:"cover"}}/>:(sp.emoji||"📦")}
+                    </div>
+                    <div style={{padding:"8px 10px"}}>
+                      <div style={{fontSize:11,fontWeight:600,marginBottom:2}}>{sname}</div>
+                      <div style={{fontSize:12,fontWeight:800,color:"#e8401c"}}>{fmt(sp.promo_price||sp.price)}</div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
       </div>
+      {showReport && <ReportModal product={p} lang={lang} onClose={()=>setShowReport(false)}/>}
     </div>
   );
 }
 
 // ─── SELLER REGISTRATION ──────────────────────────────────────────────────────
 // ─── SELLER LOGIN ─────────────────────────────────────────────────────────────
+// ─── BUYER REGISTRATION ───────────────────────────────────────────────────────
+function BuyerAuthModal({ lang, onClose, onSuccess }) {
+  const t = L[lang];
+  const [mode, setMode] = useState("login"); // login | register
+  const [form, setForm] = useState({ first_name:"", last_name:"", phone:"", email:"", shipper:"Anousith", village:"" });
+  const [loginPhone, setLoginPhone] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const setF = (k,v) => setForm(f=>({...f,[k]:v}));
+
+  const register = async () => {
+    if (!form.first_name || !form.phone) { setError(lang==="lo"?"ຊື່ + ເບີໂທ ຈຳເປັນ":lang==="en"?"Name + phone required":"姓名+电话必填"); return; }
+    setLoading(true); setError("");
+    try {
+      const data = await sbFetch("buyers", { method:"POST", body: JSON.stringify({ name:`${form.first_name} ${form.last_name}`.trim(), phone:form.phone, email:form.email, village:form.village, shipper:form.shipper }) });
+      onSuccess(data[0]);
+    } catch { onSuccess({ ...form, name:`${form.first_name} ${form.last_name}`.trim(), id:"demo-"+Date.now() }); }
+    setLoading(false);
+  };
+
+  const login = async () => {
+    if (!loginPhone) return;
+    setLoading(true); setError("");
+    try {
+      const data = await sbFetch(`buyers?phone=eq.${encodeURIComponent(loginPhone)}`);
+      if (data && data.length > 0) { onSuccess(data[0]); }
+      else { setError(lang==="lo"?"ບໍ່ພົບບັນຊີ":lang==="en"?"Account not found":"未找到账户"); }
+    } catch { setError(lang==="lo"?"ເກີດຂໍ້ຜິດພາດ":lang==="en"?"Error":"错误"); }
+    setLoading(false);
+  };
+
+  return (
+    <div style={{ position:"fixed",inset:0,zIndex:150,background:"rgba(0,0,0,0.55)",display:"flex",alignItems:"center",justifyContent:"center",padding:16 }}>
+      <div style={{ background:"#fff",borderRadius:20,padding:24,width:"100%",maxWidth:400,maxHeight:"90vh",overflowY:"auto" }}>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:16}}>
+          <div style={{fontWeight:900,fontSize:18}}>👤 {mode==="login"?(lang==="lo"?"ເຂົ້າສູ່ລະບົບ":lang==="en"?"Login":"登录"):(lang==="lo"?"ສ້າງບັນຊີ":lang==="en"?"Create account":"注册")}</div>
+          <button onClick={onClose} style={{background:"none",border:"none",fontSize:22,cursor:"pointer",color:"#999"}}>×</button>
+        </div>
+        <div style={{display:"flex",gap:8,marginBottom:20}}>
+          {["login","register"].map(m=>(
+            <button key={m} onClick={()=>{setMode(m);setError("");}} style={{ flex:1,padding:"8px 0",borderRadius:10,border:"none",cursor:"pointer",fontWeight:700,fontSize:12, background:mode===m?"linear-gradient(90deg,#ff6b35,#e8401c)":"#f5f5f5", color:mode===m?"#fff":"#555" }}>
+              {m==="login"?(lang==="lo"?"ເຂົ້າລະບົບ":lang==="en"?"Login":"登录"):(lang==="lo"?"ລົງທະບຽນ":lang==="en"?"Register":"注册")}
+            </button>
+          ))}
+        </div>
+        {error && <div style={{background:"#fff0f0",color:"#e8401c",borderRadius:10,padding:"8px 12px",fontSize:12,marginBottom:12}}>{error}</div>}
+        {mode==="login" ? (
+          <div style={{display:"flex",flexDirection:"column",gap:12}}>
+            <div>
+              <span style={label}>{t.phone}</span>
+              <input style={input()} placeholder="020 XXXX XXXX" value={loginPhone} onChange={e=>setLoginPhone(e.target.value)} onKeyDown={e=>e.key==="Enter"&&login()}/>
+            </div>
+            <button onClick={login} disabled={loading} style={btn(loading?"#ccc":"linear-gradient(90deg,#ff6b35,#e8401c)")}>
+              {loading ? t.loading : `🔓 ${lang==="lo"?"ເຂົ້າ":lang==="en"?"Login":"登录"}`}
+            </button>
+            <div style={{textAlign:"center",fontSize:12,color:"#888"}}>
+              {lang==="lo"?"ຍັງບໍ່ມີບັນຊີ?":lang==="en"?"No account yet?":"还没有账户？"} <span onClick={()=>setMode("register")} style={{color:"#e8401c",fontWeight:700,cursor:"pointer"}}>{lang==="lo"?"ລົງທະບຽນ":lang==="en"?"Register":"注册"}</span>
+            </div>
+          </div>
+        ) : (
+          <div style={{display:"flex",flexDirection:"column",gap:12}}>
+            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
+              <div>
+                <span style={label}>{lang==="lo"?"ຊື່":lang==="en"?"First name":"名"} *</span>
+                <input style={input()} placeholder={lang==="lo"?"ຊື່...":lang==="en"?"First name...":"名字..."} value={form.first_name} onChange={e=>setF("first_name",e.target.value)}/>
+              </div>
+              <div>
+                <span style={label}>{lang==="lo"?"ນາມສະກຸນ":lang==="en"?"Last name":"姓"}</span>
+                <input style={input()} placeholder={lang==="lo"?"ນາມສະກຸນ...":lang==="en"?"Last name...":"姓氏..."} value={form.last_name} onChange={e=>setF("last_name",e.target.value)}/>
+              </div>
+            </div>
+            <div>
+              <span style={label}>{t.phone} *</span>
+              <input style={input()} placeholder="020 XXXX XXXX" value={form.phone} onChange={e=>setF("phone",e.target.value)}/>
+            </div>
+            <div>
+              <span style={label}>Email</span>
+              <input style={input()} type="email" placeholder="email@example.com" value={form.email} onChange={e=>setF("email",e.target.value)}/>
+            </div>
+            <div>
+              <span style={label}>{lang==="lo"?"ທີ່ຢູ່ຮັບເຄື່ອງ (ບ້ານ)":lang==="en"?"Delivery village":"收货地址"}</span>
+              <input style={input()} placeholder={lang==="lo"?"ບ້ານ...":lang==="en"?"Village...":"村庄..."} value={form.village} onChange={e=>setF("village",e.target.value)}/>
+            </div>
+            <div>
+              <span style={label}>{lang==="lo"?"ຜູ້ຂົນສົ່ງທີ່ຕ້ອງການ":lang==="en"?"Preferred shipper":"首选快递"}</span>
+              <div style={{display:"flex",gap:6}}>
+                {SHIPPERS.map(s=>(
+                  <button key={s} onClick={()=>setF("shipper",s)} style={{ flex:1,padding:"7px 4px",borderRadius:10,fontSize:10,cursor:"pointer",fontWeight:600, border:form.shipper===s?"2px solid #e8401c":"1.5px solid #e0e0e0", background:form.shipper===s?"#fff5f3":"#fff", color:form.shipper===s?"#e8401c":"#555" }}>{s}</button>
+                ))}
+              </div>
+            </div>
+            <button onClick={register} disabled={loading} style={btn(loading?"#ccc":"linear-gradient(90deg,#ff6b35,#e8401c)")}>
+              {loading ? t.loading : `🚀 ${lang==="lo"?"ລົງທະບຽນ":lang==="en"?"Create account":"注册"}`}
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 function SellerLoginModal({ lang, onClose, onSuccess, onGoRegister }) {
   const t = L[lang];
   const [phone, setPhone] = useState("");
@@ -902,7 +1065,7 @@ function SellerDashboard({ seller, lang, onClose }) {
   const [shipperPrefs, setShipperPrefs] = useState(
     Array.isArray(seller.shippers) ? seller.shippers : seller.shipper ? [seller.shipper] : ["Anousith"]
   );
-  const [form, setForm] = useState({ name_input:"", name_lo:"", name_en:"", name_zh:"", price:"", category:"fashion", emoji:"📦", images:[], description:"", badge:"" });
+  const [form, setForm] = useState({ name_input:"", name_lo:"", name_en:"", name_zh:"", price:"", promo_price:"", category:"fashion", emoji:"📦", images:[], description:"", badge:"", stock:"", sponsored:false });
   const setF = (k,v) => setForm(f=>({...f,[k]:v}));
 
   const toggleShipper = (s) => setShipperPrefs(prev =>
@@ -987,7 +1150,7 @@ function SellerDashboard({ seller, lang, onClose }) {
     const payload = {
       name_lo: names.lo, name_en: names.en, name_zh: names.zh,
       price: parseInt(form.price)||0, category: form.category, emoji: form.emoji,
-      images: form.images, description: form.description, badge: form.badge,
+      images: form.images, description: form.description, badge: form.badge, stock: parseInt(form.stock)||null, promo_price: form.promo_price?parseInt(form.promo_price):null, sponsored: form.sponsored,
       seller_id: seller.id, seller_name: seller.name
     };
     try {
@@ -996,7 +1159,7 @@ function SellerDashboard({ seller, lang, onClose }) {
     } catch {
       setProducts(p => [{ ...payload, id:"demo-"+Date.now() }, ...p]);
     }
-    setForm({ name_input:"", name_lo:"", name_en:"", name_zh:"", price:"", category:"fashion", emoji:"📦", images:[], description:"", badge:"" });
+    setForm({ name_input:"", name_lo:"", name_en:"", name_zh:"", price:"", promo_price:"", category:"fashion", emoji:"📦", images:[], description:"", badge:"", stock:"", sponsored:false });
     setShowAdd(false);
   };
 
@@ -1032,6 +1195,19 @@ function SellerDashboard({ seller, lang, onClose }) {
               <div style={{fontSize:10,color:"#888"}}>{s.label}</div>
             </div>
           ))}
+        </div>
+
+        {/* Verified badge + Referral */}
+        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:16}}>
+          <div style={{background:seller.verified?"#f0fff4":"#fff",borderRadius:14,padding:14,boxShadow:"0 2px 8px rgba(0,0,0,0.06)",textAlign:"center"}}>
+            <div style={{fontSize:24,marginBottom:4}}>{seller.verified?"✅":"⏳"}</div>
+            <div style={{fontSize:11,fontWeight:700,color:seller.verified?"#2d6a4f":"#888"}}>{seller.verified?t.verified:(lang==="lo"?"ລໍຖ້າຢັ້ງຢືນ":lang==="en"?"Pending verification":"待认证")}</div>
+          </div>
+          <div style={{background:"#fff",borderRadius:14,padding:14,boxShadow:"0 2px 8px rgba(0,0,0,0.06)"}}>
+            <div style={{fontSize:11,fontWeight:700,color:"#888",marginBottom:6}}>🔗 {t.referral}</div>
+            <div style={{fontWeight:800,fontSize:14,color:"#e8401c",marginBottom:6}}>{seller.referral_code||seller.id?.slice(0,8).toUpperCase()}</div>
+            <button onClick={()=>navigator.clipboard?.writeText(seller.referral_code||seller.id?.slice(0,8).toUpperCase())} style={{background:"#f5f5f5",border:"none",borderRadius:8,padding:"4px 10px",fontSize:11,cursor:"pointer",fontWeight:600}}>{t.copyCode}</button>
+          </div>
         </div>
 
         {/* Shipper preferences */}
@@ -1110,30 +1286,44 @@ function SellerDashboard({ seller, lang, onClose }) {
                 <input style={input()} placeholder={lang==="lo"?"ຊື່ສິນຄ້າ...":lang==="en"?"Product name...":"商品名称..."} value={form.name_input} onChange={e=>setF("name_input",e.target.value)}/>
                 <div style={{fontSize:10,color:"#aaa",marginTop:4}}>✨ {t.nameOneOnly}</div>
               </div>
-              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
+              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:10}}>
                 <div>
                   <span style={label}>{t.price}</span>
                   <input style={input()} type="number" placeholder="85000" value={form.price} onChange={e=>setF("price",e.target.value)}/>
                 </div>
                 <div>
-                  <span style={label}>{t.mainCategory}</span>
-                  <select style={{...input(),appearance:"none"}} value={form.category} onChange={e=>setF("category",e.target.value)}>
-                    {CATEGORIES.filter(c=>c.id!=="all").map(c=>(
-                      <option key={c.id} value={c.id}>{c.icon} {c[lang]}</option>
-                    ))}
-                  </select>
+                  <span style={label}>{lang==="lo"?"ລາຄາໂປຣ":lang==="en"?"Promo price":"促销价"}</span>
+                  <input style={input()} type="number" placeholder={lang==="lo"?"ທາງເລືອກ":lang==="en"?"Optional":"可选"} value={form.promo_price} onChange={e=>setF("promo_price",e.target.value)}/>
                 </div>
+                <div>
+                  <span style={label}>{lang==="lo"?"ສະຕ໋ອກ":lang==="en"?"Stock":"库存"}</span>
+                  <input style={input()} type="number" placeholder="10" value={form.stock} onChange={e=>setF("stock",e.target.value)}/>
+                </div>
+              </div>
+              <div>
+                <span style={label}>{t.mainCategory}</span>
+                <select style={{...input(),appearance:"none"}} value={form.category} onChange={e=>setF("category",e.target.value)}>
+                  {CATEGORIES.filter(c=>c.id!=="all").map(c=>(
+                    <option key={c.id} value={c.id}>{c.icon} {c[lang]}</option>
+                  ))}
+                </select>
               </div>
               <div>
                 <span style={label}>{t.desc}</span>
                 <textarea style={{...input(),height:70,resize:"none"}} placeholder="ລາຍລະອຽດສິນຄ້າ..." value={form.description} onChange={e=>setF("description",e.target.value)}/>
               </div>
-              <div>
-                <span style={label}>Badge (🔥 ⭐ ✅ ຫຼື ປ່ອຍຫວ່າງ)</span>
-                <div style={{display:"flex",gap:8}}>
-                  {["","🔥","⭐","✅"].map(b=>(
-                    <button key={b} onClick={()=>setF("badge",b)} style={{ flex:1,padding:"8px 4px",borderRadius:10,fontSize:16,cursor:"pointer", border:form.badge===b?"2px solid #e8401c":"1.5px solid #e0e0e0", background:form.badge===b?"#fff5f3":"#fff" }}>{b||"—"}</button>
-                  ))}
+              <div style={{display:"flex",gap:10,alignItems:"center"}}>
+                <div style={{flex:1}}>
+                  <span style={label}>Badge (🔥 ⭐ ✅ ຫຼື ປ່ອຍຫວ່າງ)</span>
+                  <div style={{display:"flex",gap:8}}>
+                    {["","🔥","⭐","✅"].map(b=>(
+                      <button key={b} onClick={()=>setF("badge",b)} style={{ flex:1,padding:"8px 4px",borderRadius:10,fontSize:16,cursor:"pointer", border:form.badge===b?"2px solid #e8401c":"1.5px solid #e0e0e0", background:form.badge===b?"#fff5f3":"#fff" }}>{b||"—"}</button>
+                    ))}
+                  </div>
+                </div>
+                <div style={{textAlign:"center"}}>
+                  <span style={label}>⭐ {t.sponsored}</span>
+                  <button onClick={()=>setF("sponsored",!form.sponsored)} style={{ padding:"8px 14px",borderRadius:10,fontSize:12,cursor:"pointer",fontWeight:600, border:form.sponsored?"2px solid #e8401c":"1.5px solid #e0e0e0", background:form.sponsored?"#fff5f3":"#fff", color:form.sponsored?"#e8401c":"#555" }}>{form.sponsored?"ON":"OFF"}</button>
                 </div>
               </div>
               <button onClick={addProduct} disabled={translating} style={btn(translating?"#ccc":"linear-gradient(90deg,#ff6b35,#e8401c)")}>
@@ -1176,6 +1366,150 @@ function SellerDashboard({ seller, lang, onClose }) {
 
 // ─── MAIN APP ─────────────────────────────────────────────────────────────────
 // ─── MESSAGES INBOX ───────────────────────────────────────────────────────────
+// ─── ORDER HISTORY ────────────────────────────────────────────────────────────
+function OrderHistory({ lang, phone, onClose, onOpenChat }) {
+  const t = L[lang];
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const load = async () => {
+      if (!phone) { setLoading(false); return; }
+      try {
+        const data = await sbFetch(`conversations?buyer_phone=eq.${encodeURIComponent(phone)}&order=created_at.desc`);
+        setOrders(data || []);
+      } catch { setOrders([]); }
+      setLoading(false);
+    };
+    load();
+  }, [phone]);
+
+  return (
+    <div style={{ position:"fixed",inset:0,zIndex:145,background:"#f7f7f9",display:"flex",flexDirection:"column" }}>
+      <div style={{ background:"linear-gradient(90deg,#ff6b35,#e8401c)",padding:"16px 20px",color:"#fff",display:"flex",justifyContent:"space-between",alignItems:"center" }}>
+        <div style={{fontWeight:900,fontSize:17}}>📋 {t.orderHistory}</div>
+        <button onClick={onClose} style={{background:"rgba(255,255,255,0.2)",border:"none",color:"#fff",borderRadius:10,padding:"8px 14px",cursor:"pointer",fontWeight:700}}>×</button>
+      </div>
+      <div style={{flex:1,overflowY:"auto",padding:16,display:"flex",flexDirection:"column",gap:10}}>
+        {loading && <div style={{textAlign:"center",color:"#bbb",padding:40}}>{t.loading}</div>}
+        {!loading && orders.length===0 && <div style={{textAlign:"center",color:"#bbb",padding:60}}>📭<br/><span style={{fontSize:13}}>{t.noConversations}</span></div>}
+        {orders.map(o=>(
+          <div key={o.id} onClick={()=>onOpenChat(o)} style={{ background:"#fff",borderRadius:14,padding:16,cursor:"pointer",boxShadow:"0 2px 8px rgba(0,0,0,0.05)" }}>
+            <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
+              <div style={{fontWeight:700,fontSize:13}}>🏪 {o.seller_name}</div>
+              <div style={{fontWeight:800,color:"#e8401c"}}>{fmt(o.total)}</div>
+            </div>
+            <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
+              {(o.items||[]).map((it,i)=>(
+                <div key={i} style={{background:"#fafafa",borderRadius:8,padding:"4px 8px",fontSize:11,color:"#555"}}>
+                  {it.emoji||"📦"} {it[`name_${lang}`]||it.name_en} ×{it.qty}
+                </div>
+              ))}
+            </div>
+            <div style={{fontSize:11,color:"#aaa",marginTop:8}}>
+              📦 {o.shipper} · 📍 {o.village}
+              {o.payment_confirmed && <span style={{marginLeft:8,color:"#2d6a4f",fontWeight:600}}>✅ {lang==="lo"?"ຊຳລະແລ້ວ":lang==="en"?"Paid":"已付款"}</span>}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ─── REPORT MODAL ─────────────────────────────────────────────────────────────
+function ReportModal({ product, lang, onClose }) {
+  const t = L[lang];
+  const [reason, setReason] = useState("");
+  const [sent, setSent] = useState(false);
+  const reasons = lang==="lo"
+    ? ["ສິນຄ້າບໍ່ຖືກຕ້ອງ","ຮາຄາຕົວະຕົວ","ຮ້ານບໍ່ໜ້າໄວ້ໃຈ","ສິນຄ້າຜິດກົດໝາຍ","ອື່ນໆ"]
+    : lang==="en"
+    ? ["Wrong product info","Fake price","Untrustworthy seller","Illegal product","Other"]
+    : ["商品信息错误","价格欺诈","不可信卖家","违法商品","其他"];
+
+  const submit = async () => {
+    if (!reason) return;
+    try {
+      await sbFetch("reports", { method:"POST", body: JSON.stringify({ product_id: product.id, seller_id: product.seller_id, seller_name: product.seller_name, reason }) });
+    } catch {}
+    setSent(true);
+  };
+
+  return (
+    <div style={{ position:"fixed",inset:0,zIndex:200,background:"rgba(0,0,0,0.5)",display:"flex",alignItems:"center",justifyContent:"center",padding:16 }}>
+      <div style={{ background:"#fff",borderRadius:20,padding:24,width:"100%",maxWidth:360 }}>
+        {sent ? (
+          <div style={{textAlign:"center",padding:"20px 0"}}>
+            <div style={{fontSize:40,marginBottom:12}}>✅</div>
+            <div style={{fontWeight:700,fontSize:16,marginBottom:8}}>{t.reportSent}</div>
+            <button onClick={onClose} style={btn()}>{t.close}</button>
+          </div>
+        ) : (
+          <>
+            <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:16}}>
+              <div style={{fontWeight:900,fontSize:16}}>🚩 {t.report}</div>
+              <button onClick={onClose} style={{background:"none",border:"none",fontSize:22,cursor:"pointer",color:"#999"}}>×</button>
+            </div>
+            <div style={{display:"flex",flexDirection:"column",gap:8,marginBottom:16}}>
+              {reasons.map(r=>(
+                <button key={r} onClick={()=>setReason(r)} style={{ padding:"10px 14px",borderRadius:10,textAlign:"left",cursor:"pointer",fontSize:13, border:reason===r?"2px solid #e8401c":"1.5px solid #e8e8e8", background:reason===r?"#fff5f3":"#fff", color:reason===r?"#e8401c":"#555", fontWeight:reason===r?700:400 }}>{r}</button>
+              ))}
+            </div>
+            <button onClick={submit} disabled={!reason} style={btn(reason?"linear-gradient(90deg,#ff6b35,#e8401c)":"#ccc")}>
+              {lang==="lo"?"ສົ່ງລາຍງານ":lang==="en"?"Send report":"发送举报"}
+            </button>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ─── FILTER BAR ───────────────────────────────────────────────────────────────
+function FilterBar({ lang, filters, onFilters }) {
+  const t = L[lang];
+  const [open, setOpen] = useState(false);
+  const [minP, setMinP] = useState(filters.minPrice||"");
+  const [maxP, setMaxP] = useState(filters.maxPrice||"");
+
+  const apply = () => { onFilters({ ...filters, minPrice: minP?parseInt(minP):null, maxPrice: maxP?parseInt(maxP):null }); setOpen(false); };
+  const clear = () => { setMinP(""); setMaxP(""); onFilters({ ...filters, minPrice:null, maxPrice:null }); setOpen(false); };
+
+  const SORTS = [
+    { key:"newest", label:t.newest },
+    { key:"priceAsc", label:t.priceAsc },
+    { key:"priceDesc", label:t.priceDesc },
+    { key:"topRated", label:t.topRated },
+  ];
+
+  return (
+    <div style={{position:"relative"}}>
+      <div style={{display:"flex",gap:8,overflowX:"auto",padding:"8px 0",whiteSpace:"nowrap"}}>
+        <button onClick={()=>setOpen(o=>!o)} style={{ padding:"6px 12px",borderRadius:20,border:"1.5px solid #e8e8e8",background:open?"#fff5f3":"#fff",cursor:"pointer",fontSize:12,fontWeight:600,color:open?"#e8401c":"#555",flexShrink:0 }}>
+          🔽 {t.filterPrice}{(filters.minPrice||filters.maxPrice)?" ●":""}
+        </button>
+        {SORTS.map(s=>(
+          <button key={s.key} onClick={()=>onFilters({...filters,sort:s.key})} style={{ padding:"6px 12px",borderRadius:20,border:"1.5px solid #e8e8e8",background:filters.sort===s.key?"linear-gradient(90deg,#ff6b35,#e8401c)":"#fff",cursor:"pointer",fontSize:12,fontWeight:600,color:filters.sort===s.key?"#fff":"#555",flexShrink:0 }}>{s.label}</button>
+        ))}
+      </div>
+      {open && (
+        <div style={{ position:"absolute",top:"100%",left:0,background:"#fff",borderRadius:14,padding:16,boxShadow:"0 4px 20px rgba(0,0,0,0.12)",zIndex:50,width:260 }}>
+          <div style={{fontSize:12,fontWeight:700,marginBottom:10}}>{t.filterPrice}</div>
+          <div style={{display:"flex",gap:8,marginBottom:12}}>
+            <input value={minP} onChange={e=>setMinP(e.target.value)} type="number" placeholder={t.minPrice} style={{...input(),flex:1,fontSize:12,padding:"8px 10px"}}/>
+            <input value={maxP} onChange={e=>setMaxP(e.target.value)} type="number" placeholder={t.maxPrice} style={{...input(),flex:1,fontSize:12,padding:"8px 10px"}}/>
+          </div>
+          <div style={{display:"flex",gap:8}}>
+            <button onClick={apply} style={btn("linear-gradient(90deg,#ff6b35,#e8401c)",undefined,{flex:1,padding:"8px 0",fontSize:12})}>{t.apply}</button>
+            <button onClick={clear} style={btn("#f5f5f5","#555",{flex:"0 0 auto",padding:"8px 14px",fontSize:12,width:"auto"})}>{t.cancel}</button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function MessagesInbox({ lang, onClose, onOpenChat }) {
   const t = L[lang];
   const [phone, setPhone] = useState("");
@@ -1236,12 +1570,16 @@ export default function App() {
   const [showSellerReg, setShowSellerReg] = useState(false);
   const [showSellerLogin, setShowSellerLogin] = useState(false);
   const [currentSeller, setCurrentSeller] = useState(null);
+  const [currentBuyer, setCurrentBuyer] = useState(null);
+  const [showBuyerAuth, setShowBuyerAuth] = useState(false);
   const [dbProducts, setDbProducts] = useState([]);
-  const [activeTab, setActiveTab]   = useState("home"); // home | sell
+  const [activeTab, setActiveTab]   = useState("home");
   const [activeChat, setActiveChat] = useState(null);
   const [showInbox, setShowInbox]   = useState(false);
+  const [showOrderHistory, setShowOrderHistory] = useState(false);
   const [myPhone, setMyPhone]       = useState("");
-  const [viewShop, setViewShop]     = useState(null); // { seller_id, seller_name }
+  const [viewShop, setViewShop]     = useState(null);
+  const [filters, setFilters]       = useState({ sort:"newest", minPrice:null, maxPrice:null });
 
   const t = L[lang];
 
@@ -1270,10 +1608,27 @@ export default function App() {
   }, []);
 
   const allProducts = [...dbProducts, ...DEMO_PRODUCTS];
-  const filtered = allProducts.filter(p =>
+  const sevenDaysAgo = new Date(Date.now() - 7*24*60*60*1000).toISOString();
+
+  let filtered = allProducts.filter(p =>
     (cat === "all" || p.category === cat) &&
-    (search === "" || [p.name_lo,p.name_en,p.name_zh].some(n=>n&&n.toLowerCase().includes(search.toLowerCase())))
+    (search === "" || [p.name_lo,p.name_en,p.name_zh].some(n=>n&&n.toLowerCase().includes(search.toLowerCase()))) &&
+    (!filters.minPrice || (p.promo_price||p.price) >= filters.minPrice) &&
+    (!filters.maxPrice || (p.promo_price||p.price) <= filters.maxPrice)
   );
+
+  // Sort
+  if (filters.sort === "priceAsc") filtered = [...filtered].sort((a,b)=>(a.promo_price||a.price)-(b.promo_price||b.price));
+  else if (filters.sort === "priceDesc") filtered = [...filtered].sort((a,b)=>(b.promo_price||b.price)-(a.promo_price||a.price));
+  else if (filters.sort === "topRated") filtered = [...filtered].sort((a,b)=>(b.rating||0)-(a.rating||0));
+  else filtered = [...filtered].sort((a,b)=>new Date(b.created_at||0)-new Date(a.created_at||0));
+
+  // Sponsored first
+  const sponsored = filtered.filter(p=>p.sponsored);
+  const regular = filtered.filter(p=>!p.sponsored);
+  filtered = [...sponsored, ...regular];
+
+  const newArrivals = allProducts.filter(p => p.created_at && p.created_at > sevenDaysAgo).slice(0,10);
 
   const addToCart = (p) => {
     setCart(prev => {
@@ -1303,6 +1658,10 @@ export default function App() {
               {["lo","en","zh"].map(l=>(
                 <button key={l} onClick={()=>setLang(l)} style={{ padding:"4px 9px",borderRadius:8,border:"none",cursor:"pointer",fontWeight:700,fontSize:11, background:lang===l?"#fff":"rgba(255,255,255,0.2)", color:lang===l?"#e8401c":"#fff" }}>{l.toUpperCase()}</button>
               ))}
+              {currentBuyer
+                ? <button onClick={()=>setCurrentBuyer(null)} style={{ background:"rgba(255,255,255,0.2)",border:"none",borderRadius:12,padding:"8px 10px",cursor:"pointer",fontWeight:700,color:"#fff",fontSize:11 }}>👋 {currentBuyer.name?.split(" ")[0]}</button>
+                : <button onClick={()=>setShowBuyerAuth(true)} style={{ background:"rgba(255,255,255,0.2)",border:"none",borderRadius:12,padding:"8px 10px",cursor:"pointer",fontWeight:700,color:"#fff",fontSize:11 }}>🛍️ {lang==="lo"?"ສ້າງບັນຊີ":lang==="en"?"Sign in":"登录"}</button>
+              }
               {currentSeller
                 ? <button onClick={()=>{setCurrentSeller(null);setActiveTab("home");}} style={{ background:"rgba(255,255,255,0.2)",border:"none",borderRadius:12,padding:"8px 10px",cursor:"pointer",fontWeight:700,color:"#fff",fontSize:11 }}>🔓 {t.logout}</button>
                 : <button onClick={()=>setShowSellerLogin(true)} style={{ background:"rgba(255,255,255,0.2)",border:"none",borderRadius:12,padding:"8px 10px",cursor:"pointer",fontWeight:700,color:"#fff",fontSize:11 }}>👤 {t.login}</button>
@@ -1359,7 +1718,42 @@ export default function App() {
 
       {/* PRODUCTS */}
       <div style={{maxWidth:900,margin:"0 auto",padding:"0 16px 100px"}}>
-        <div style={{fontSize:13,color:"#888",marginBottom:12}}>{filtered.length} {lang==="lo"?"ສິນຄ້າ":lang==="en"?"products":"商品"}</div>
+
+        {/* New arrivals strip */}
+        {newArrivals.length > 0 && (
+          <div style={{marginBottom:16}}>
+            <div style={{fontWeight:800,fontSize:14,marginBottom:8}}>🆕 {t.newArrivals}</div>
+            <div style={{display:"flex",gap:10,overflowX:"auto",paddingBottom:4}}>
+              {newArrivals.map(p=>{
+                const name = p[`name_${lang}`]||p.name_en||p.name_lo;
+                return (
+                  <div key={p.id} onClick={()=>setDetail(p)} style={{flexShrink:0,width:110,background:"#fff",borderRadius:12,overflow:"hidden",cursor:"pointer",boxShadow:"0 2px 8px rgba(0,0,0,0.07)"}}>
+                    <div style={{aspectRatio:"1/1",background:"#f5f5f5",display:"flex",alignItems:"center",justifyContent:"center",fontSize:28,overflow:"hidden"}}>
+                      {p.images&&p.images[0]?<img src={p.images[0]} alt="" style={{width:"100%",height:"100%",objectFit:"cover"}}/>:(p.emoji||"📦")}
+                    </div>
+                    <div style={{padding:"6px 8px"}}>
+                      <div style={{fontSize:10,fontWeight:600,marginBottom:2,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{name}</div>
+                      <div style={{fontSize:11,fontWeight:800,color:"#e8401c"}}>{fmt(p.promo_price||p.price)}</div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* Filter bar */}
+        <FilterBar lang={lang} filters={filters} onFilters={setFilters}/>
+
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",margin:"8px 0 12px"}}>
+          <div style={{fontSize:13,color:"#888"}}>{filtered.length} {lang==="lo"?"ສິນຄ້າ":lang==="en"?"products":"商品"}</div>
+          {currentBuyer && (
+            <button onClick={()=>setShowOrderHistory(true)} style={{background:"none",border:"1.5px solid #e8e8e8",borderRadius:10,padding:"5px 12px",fontSize:11,cursor:"pointer",fontWeight:600,color:"#555"}}>
+              📋 {t.orderHistory}
+            </button>
+          )}
+        </div>
+
         <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(158px,1fr))",gap:14}}>
           {filtered.map(p=>(
             <ProductCard key={p.id} p={p} lang={lang} onAdd={addToCart} onDetail={setDetail}/>
@@ -1389,11 +1783,13 @@ export default function App() {
         ))}
       </div>
 
-      {showCart&&<CartDrawer cart={cart} lang={lang} onClose={()=>setShowCart(false)} onQty={updateQty} onOpenChat={(conv)=>{setActiveChat(conv);setShowCart(false);}}/>}
-      {detail&&<DetailModal p={detail} lang={lang} onClose={()=>setDetail(null)} onAdd={addToCart} onViewShop={(p)=>{setViewShop({seller_id:p.seller_id,seller_name:p.seller_name});setDetail(null);}}/>}
+      {showCart&&<CartDrawer cart={cart} lang={lang} onClose={()=>setShowCart(false)} onQty={updateQty} onOpenChat={(conv)=>{setActiveChat(conv);setShowCart(false);}} onClearCart={()=>setCart([])} buyerName={currentBuyer?.name||""} buyerPhone={currentBuyer?.phone||""} buyerVillage={currentBuyer?.village||""} buyerShipper={currentBuyer?.shipper||""}/>}
+      {showBuyerAuth&&<BuyerAuthModal lang={lang} onClose={()=>setShowBuyerAuth(false)} onSuccess={buyer=>{setCurrentBuyer(buyer);setShowBuyerAuth(false);}}/>}
+      {detail&&<DetailModal p={detail} lang={lang} onClose={()=>setDetail(null)} onAdd={addToCart} allProducts={allProducts} onViewShop={(p)=>{setViewShop({seller_id:p.seller_id,seller_name:p.seller_name});setDetail(null);}}/>}
       {showSellerReg&&<SellerRegModal lang={lang} onClose={()=>setShowSellerReg(false)} onSuccess={seller=>{setCurrentSeller(seller);setShowSellerReg(false);setActiveTab("sell");}}/>}
       {showSellerLogin&&<SellerLoginModal lang={lang} onClose={()=>setShowSellerLogin(false)} onSuccess={seller=>{setCurrentSeller(seller);setShowSellerLogin(false);setActiveTab("sell");}} onGoRegister={()=>{setShowSellerLogin(false);setShowSellerReg(true);}}/>}
       {showInbox&&<MessagesInbox lang={lang} onClose={()=>setShowInbox(false)} onOpenChat={(conv)=>{setActiveChat(conv);setShowInbox(false);}}/>}
+      {showOrderHistory&&<OrderHistory lang={lang} phone={currentBuyer?.phone||""} onClose={()=>setShowOrderHistory(false)} onOpenChat={(conv)=>{setActiveChat(conv);setShowOrderHistory(false);}}/>}
       {activeChat&&<ChatModal conversation={activeChat} lang={lang} onClose={()=>setActiveChat(null)}/>}
       {viewShop&&<SellerShopModal sellerId={viewShop.seller_id} sellerName={viewShop.seller_name} lang={lang} onClose={()=>setViewShop(null)} onAdd={addToCart}/>}
     </div>
